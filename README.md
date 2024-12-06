@@ -1,8 +1,8 @@
 # abacatepay-nodejs-sdk
 AbacatePay NodeJS SDK for you to start receiving payments in seconds
 
-## exemplo
-```
+## Example
+```js
 import AbacatePay from 'abacatepay';
 
 const abacate = AbacatePay('{{ key }}');
@@ -12,19 +12,19 @@ const billing = abacate.billing.create({
   methods: ["PIX"],
   products: [
     {
-      externalId: "PLANO-PRO",
-      name: "Plano PRO",
+      externalId: "PRO-PLAN",
+      name: "Pro plan",
       quantity: 1,
       price: 1000
     }
   ],
-  returnUrl: "https://meusite.com/app",
-  completionUrl: "https://meusite.com/pagamento/sucesso",
+  returnUrl: "https://yoursite.com/app",
+  completionUrl: "https://yoursite.com/pagamento/sucesso",
   automaticTaxReceipt: true
 });
 
 console.log(billing)
-/*
+/* Returns:
 {
   _id: 'bill_12345667',
   url: 'https://abacatepay.com/pay/bill_12345667',
