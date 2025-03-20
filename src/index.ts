@@ -3,6 +3,8 @@ import { createRequest } from './requests';
 import type {
   CreateBillingData,
   CreateBillingResponse,
+  CreateCouponData,
+  CreateCouponResponse,
   CreateCustomerData,
   CreateCustomerResponse,
   ListBillingResponse,
@@ -62,6 +64,23 @@ export default function AbacatePay(apiKey: string) {
        */
       list(): Promise<ListCustomerResponse> {
         return request('/customer/list', { method: 'GET' });
+      },
+    },
+    /**
+     * Gerencie seus cupons de desconto.
+     */
+    coupon: {
+      /**
+       * Permite que você crie um novo cupom de desconto.
+       *
+       * @param data Dados do cupom
+       * @returns Dados do cupom criado ou erro
+       */
+      create(data: CreateCouponData): Promise<CreateCouponResponse> {
+        return request('/coupon/create', {
+          method: 'POST',
+          body: JSON.stringify(data),
+        });
       },
     },
   };
