@@ -5,7 +5,7 @@ export type BillingStatus =
   | 'PAID'
   | 'REFUNDED';
 export type BillingMethods = 'PIX';
-export type BillingKind = 'ONE_TIME';
+export type BillingKind = 'ONE_TIME' | 'MULTIPLE_PAYMENTS';
 
 export type IBilling = {
   /**
