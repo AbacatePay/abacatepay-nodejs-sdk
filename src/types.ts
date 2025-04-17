@@ -3,7 +3,8 @@ export type BillingStatus =
   | 'EXPIRED'
   | 'CANCELLED'
   | 'PAID'
-  | 'REFUNDED';
+  | 'REFUNDED'
+  | 'ACTIVE';
 export type BillingMethods = 'PIX';
 export type BillingKind = 'ONE_TIME' | 'MULTIPLE_PAYMENTS';
 
@@ -28,6 +29,7 @@ export type IBilling = {
    * - `CANCELLED`: A cobrança foi cancelada.
    * - `PAID`: A cobrança foi paga.
    * - `REFUNDED`: A cobrança foi paga e o valor foi devolvido ao cliente.
+   * - `ACTIVE`: A cobrança está ativa (aplicável para MULTIPLE_PAYMENTS).
    */
   status: BillingStatus;
   /**
@@ -51,9 +53,9 @@ export type IBilling = {
    */
   nextBilling: string | null;
   /**
-   * Cliente associado à cobrança.
+   * Cliente associado à cobrança. Pode ser um objeto vazio para MULTIPLE_PAYMENTS.
    */
-  customer: ICustomer;
+  customer: ICustomer | Record<string, never>;
   /**
    * Metadados da cobrança.
    */
@@ -66,6 +68,18 @@ export type IBilling = {
    * Data e hora da última atualização da cobrança.
    */
   updatedAt: string;
+  /**
+   * Indica se cupons são permitidos para esta cobrança.
+   */
+  allowCoupons?: boolean;
+  /**
+   * Lista de cupons disponíveis para esta cobrança.
+   */
+  coupons?: any[];
+  /**
+   * Lista de cupons utilizados nesta cobrança.
+   */
+  couponsUsed?: any[];
 };
 
 export type IBillingMetadata = {
@@ -83,101 +97,105 @@ export type IBillingMetadata = {
   completionUrl: string;
 };
 
-export type CreateBillingData =
-  | {
-      /**
-       * Define o tipo de frequência da cobrança. Atualmente, somente cobranças únicas são suportadas.
-       */
-      frequency: BillingKind;
-      /**
-       * Métodos de pagamento que serão utilizados. Atualmente, apenas PIX é suportado.
-       */
-      methods: BillingMethods[];
-      /**
-       * Lista de produtos que seu cliente está pagando.
-       */
-      products: {
-        /**
-         * O id do produto em seu sistema. Utilizamos esse id para criar seu produto na AbacatePay de forma automática, então certifique-se de que seu id é único.
-         */
-        externalId: string;
-        /**
-         * Nome do produto.
-         */
-        name: string;
-        /**
-         * Quantidade do produto sendo adquirida.
-         */
-        quantity: number;
-        /**
-         * Preço por unidade do produto em centavos. O mínimo é 100 (1 BRL).
-         */
-        price: number;
-        /**
-         * Descrição detalhada do produto. Opcional.
-         */
-        description?: string;
-      }[];
-      /**
-       * URL para redirecionar o cliente caso o mesmo clique na opção "Voltar".
-       */
-      returnUrl: string;
-      /**
-       * URL para redirecionar o cliente quando o pagamento for concluído.
-       */
-      completionUrl: string;
-      /**
-       * O id de um cliente já cadastrado em sua loja.
-       */
-      customerId: string;
-    }
-  | {
-      /**
-       * Define o tipo de frequência da cobrança. Atualmente, somente cobranças únicas são suportadas.
-       */
-      frequency: BillingKind;
-      /**
-       * Métodos de pagamento que serão utilizados. Atualmente, apenas PIX é suportado.
-       */
-      methods: BillingMethods[];
-      /**
-       * Lista de produtos que seu cliente está pagando.
-       */
-      products: {
-        /**
-         * O id do produto em seu sistema. Utilizamos esse id para criar seu produto na AbacatePay de forma automática, então certifique-se de que seu id é único.
-         */
-        externalId: string;
-        /**
-         * Nome do produto.
-         */
-        name: string;
-        /**
-         * Quantidade do produto sendo adquirida.
-         */
-        quantity: number;
-        /**
-         * Preço por unidade do produto em centavos. O mínimo é 100 (1 BRL).
-         */
-        price: number;
-        /**
-         * Descrição detalhada do produto. Opcional.
-         */
-        description?: string;
-      }[];
-      /**
-       * URL para redirecionar o cliente caso o mesmo clique na opção "Voltar".
-       */
-      returnUrl: string;
-      /**
-       * URL para redirecionar o cliente quando o pagamento for concluído.
-       */
-      completionUrl: string;
-      /**
-       * Os dados do seu cliente para criá-lo
-       */
-      customer: ICustomerMetadata;
-    };
+/**
+ * Tipo de produto para criação de cobrança
+ */
+export type BillingProduct = {
+  /**
+   * O id do produto em seu sistema. Utilizamos esse id para criar seu produto na AbacatePay de forma automática, então certifique-se de que seu id é único.
+   */
+  externalId: string;
+  /**
+   * Nome do produto.
+   */
+  name: string;
+  /**
+   * Quantidade do produto sendo adquirida.
+   */
+  quantity: number;
+  /**
+   * Preço por unidade do produto em centavos. O mínimo é 100 (1 BRL).
+   */
+  price: number;
+  /**
+   * Descrição detalhada do produto. Opcional.
+   */
+  description?: string;
+};
+
+/**
+ * Campos básicos comuns a todos os tipos de cobrança
+ */
+export type BaseBillingData = {
+  /**
+   * Métodos de pagamento que serão utilizados. Atualmente, apenas PIX é suportado.
+   */
+  methods: BillingMethods[];
+  /**
+   * Lista de produtos que seu cliente está pagando.
+   */
+  products: BillingProduct[];
+  /**
+   * URL para redirecionar o cliente caso o mesmo clique na opção "Voltar".
+   */
+  returnUrl: string;
+  /**
+   * URL para redirecionar o cliente quando o pagamento for concluído.
+   */
+  completionUrl: string;
+};
+
+/**
+ * Cobrança única com customerId
+ */
+export type OneTimeWithCustomerId = BaseBillingData & {
+  /**
+   * Define o tipo de frequência da cobrança como pagamento único.
+   */
+  frequency: 'ONE_TIME';
+  /**
+   * O id de um cliente já cadastrado em sua loja.
+   */
+  customerId: string;
+};
+
+/**
+ * Cobrança única com dados do cliente
+ */
+export type OneTimeWithCustomer = BaseBillingData & {
+  /**
+   * Define o tipo de frequência da cobrança como pagamento único.
+   */
+  frequency: 'ONE_TIME';
+  /**
+   * Os dados do seu cliente para criá-lo
+   */
+  customer: ICustomerMetadata;
+};
+
+/**
+ * Cobrança com múltiplos pagamentos, onde o cliente é opcional
+ */
+export type MultiplePayments = BaseBillingData & {
+  /**
+   * Define o tipo de frequência da cobrança como múltiplos pagamentos.
+   * Para este tipo de cobrança, as informações do cliente são opcionais.
+   */
+  frequency: 'MULTIPLE_PAYMENTS';
+  /**
+   * O id de um cliente já cadastrado em sua loja. Opcional para MULTIPLE_PAYMENTS.
+   */
+  customerId?: string;
+  /**
+   * Os dados do seu cliente para criá-lo. Opcional para MULTIPLE_PAYMENTS.
+   */
+  customer?: ICustomerMetadata;
+};
+
+/**
+ * Tipo unificado para criação de cobrança
+ */
+export type CreateBillingData = OneTimeWithCustomerId | OneTimeWithCustomer | MultiplePayments;
 
 export type CreateBillingLinkData = Pick<
   CreateBillingData,
