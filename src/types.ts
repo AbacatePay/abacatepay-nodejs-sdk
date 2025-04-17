@@ -271,3 +271,109 @@ export interface IAbacatePay {
   billing: IAbacatePayBilling;
   customer: IAbacatePayCustomerBilling;
 }
+
+export type CouponStatus = 'ACTIVE' | 'DELETED' | 'DISABLED';
+export type DiscountKind = 'PERCENTAGE' | 'FIXED';
+
+export type ICoupon = {
+  /**
+   * Identificador único do cupom.
+   */
+  id: string;
+  /**
+   * Tipo de desconto aplicado, porcentagem ou fixo.
+   */
+  discountKind: DiscountKind;
+  /**
+   * Quantidade de desconto a ser aplicado.
+   */
+  discount: number;
+  /**
+   * Quantidade de vezes em que o cupom pode ser resgatado. -1 significa ilimitado.
+   */
+  maxRedeems: number;
+  /**
+   * Quantidade de vezes que o cupom já foi resgatado.
+   */
+  redeemsCount: number;
+  /**
+   * Status do cupom.
+   */
+  status: CouponStatus;
+  /**
+   * Indica se o cupom foi criado em ambiente de testes.
+   */
+  devMode: boolean;
+  /**
+   * Descrição do cupom.
+   */
+  notes?: string;
+  /**
+   * Metadados do cupom.
+   */
+  metadata: Record<string, unknown>;
+  /**
+   * Data e hora de criação do cupom.
+   */
+  createdAt: string;
+  /**
+   * Data e hora da última atualização do cupom.
+   */
+  updatedAt: string;
+};
+
+export type CreateCouponData = {
+  /**
+   * Identificador único do cupom.
+   */
+  code: string;
+  /**
+   * Tipo de desconto aplicado.
+   */
+  discountKind: DiscountKind;
+  /**
+   * Quantidade de desconto a ser aplicado.
+   */
+  discount: number;
+  /**
+   * Quantidade máxima de resgates do cupom. -1 significa ilimitado.
+   */
+  maxRedeems?: number;
+  /**
+   * Descrição do cupom.
+   */
+  notes?: string;
+  /**
+   * Metadados opcionais do cupom.
+   */
+  metadata?: Record<string, unknown>;
+};
+
+export type CreateCouponResponse =
+  | {
+      error: string;
+    }
+  | {
+      error: null;
+      data: ICoupon;
+    };
+
+export type ListCouponResponse =
+  | {
+      error: string;
+    }
+  | {
+      error: null;
+      data: ICoupon[];
+    };
+
+export interface IAbacatePayCoupon {
+  create(data: CreateCouponData): Promise<CreateCouponResponse>;
+  list(): Promise<ListCouponResponse>;
+}
+
+export interface IAbacatePay {
+  billing: IAbacatePayBilling;
+  customer: IAbacatePayCustomerBilling;
+  coupon: IAbacatePayCoupon;
+}
