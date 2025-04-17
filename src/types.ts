@@ -1,11 +1,11 @@
 export type BillingStatus =
-  | 'PENDING'
-  | 'EXPIRED'
-  | 'CANCELLED'
-  | 'PAID'
-  | 'REFUNDED';
-export type BillingMethods = 'PIX';
-export type BillingKind = 'ONE_TIME';
+  | "PENDING"
+  | "EXPIRED"
+  | "CANCELLED"
+  | "PAID"
+  | "REFUNDED";
+export type BillingMethods = "PIX";
+export type BillingKind = "ONE_TIME" | "MULTIPLE_PAYMENTS";
 
 export type IBilling = {
   /**
@@ -178,6 +178,14 @@ export type CreateBillingData =
        */
       customer: ICustomerMetadata;
     };
+
+export type CreateBillingLinkData = Pick<
+  CreateBillingData,
+  "completionUrl" | "methods" | "products" | "returnUrl" 
+> & {
+  customer?: ICustomerMetadata;
+  cutomerId?: string;
+};
 
 export type CreateBillingResponse =
   | {

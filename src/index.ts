@@ -2,6 +2,7 @@ import { AbacatePayError } from "./exceptions";
 import { createRequest } from "./requests";
 import type {
   CreateBillingData,
+  CreateBillingLinkData,
   CreateBillingResponse,
   CreateCustomerData,
   CreateCustomerResponse,
@@ -59,6 +60,23 @@ export default function AbacatePay(apiKey: string) {
           body: JSON.stringify(data),
         });
       },
+
+      /**
+       * Permite que você crie um link de cobrança sem precisar de um cliente (o cliente informa os dados dele na hora de pagar).
+       *
+       * @param data Dados da cobrança
+       * @returns Dados da cobrança criada ou erro
+       */
+      createLink(data: CreateBillingLinkData): Promise<CreateBillingResponse> {
+        return request("/billing/create", {
+          method: "POST",
+          body: JSON.stringify({
+            ...data,
+            frequency: "MULTIPLE_PAYMENTS",
+          }),
+        });
+      },
+
       /**
        * Permite que você recupere uma lista de todas as cobranças criadas.
        *
