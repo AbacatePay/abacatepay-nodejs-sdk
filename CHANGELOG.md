@@ -1,5 +1,11 @@
 # abacatepay-nodejs-sdk
 
+## 1.2.1
+
+### Patch Changes
+
+- Sync NPM version with git tags
+
 ## 1.2.0
 
 ### Minor Changes
