@@ -182,6 +182,7 @@ export type CreateBillingData =
 export type CreateBillingResponse =
   | {
       error: string;
+      data: null;
     }
   | {
       error: null;
@@ -190,6 +191,7 @@ export type CreateBillingResponse =
 export type ListBillingResponse =
   | {
       error: string;
+      data: null;
     }
   | {
       error: null;
@@ -231,6 +233,7 @@ export type CreateCustomerData = ICustomerMetadata;
 export type CreateCustomerResponse =
   | {
       error: string;
+      data: null;
     }
   | {
       error: null;
@@ -239,6 +242,7 @@ export type CreateCustomerResponse =
 export type ListCustomerResponse =
   | {
       error: string;
+      data: null;
     }
   | {
       error: null;
