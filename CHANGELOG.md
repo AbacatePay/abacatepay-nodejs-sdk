@@ -1,5 +1,17 @@
 # abacatepay-nodejs-sdk
 
+## 1.2.0
+
+### Minor Changes
+
+- 8afe53c: Add functionality to create discount coupons.
+
+### Patch Changes
+
+- - Update API contracts
+  - Add Coupon module
+  - Add Billing creation in `MULTIPLE_PAYMENTS` mode
+
 ## 1.1.1
 
 ### Patch Changes
