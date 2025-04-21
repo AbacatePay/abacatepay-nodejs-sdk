@@ -267,11 +267,6 @@ export interface IAbacatePayCustomerBilling {
   list(): Promise<ListCustomerResponse>;
 }
 
-export interface IAbacatePay {
-  billing: IAbacatePayBilling;
-  customer: IAbacatePayCustomerBilling;
-}
-
 export type CouponStatus = 'ACTIVE' | 'DELETED' | 'DISABLED';
 export type DiscountKind = 'PERCENTAGE' | 'FIXED';
 
@@ -372,8 +367,95 @@ export interface IAbacatePayCoupon {
   list(): Promise<ListCouponResponse>;
 }
 
+export type PixQrCodeStatus =
+  | 'PENDING'
+  | 'EXPIRED'
+  | 'CANCELLED'
+  | 'PAID'
+  | 'REFUNDED';
+
+export type IPixQrCode = {
+  /**
+   * Id único da cobrança
+   */
+  id: string;
+  /**
+   * Valor da cobrança em centavos (ex: 4000 = R$ 40,00)
+   */
+  amount: number;
+  /**
+   * Status da cobrança. Pode ser `PENDING`, `EXPIRED`, `CANCELLED`, `PAID`, `REFUNDED`.
+   */
+  status: PixQrCodeStatus;
+  /**
+   * Indica se a cobrança está em ambiente de testes (`true`) ou produção (`false`).
+   */
+  devMode: boolean;
+  /**
+   * Método de pagamento.
+   */
+  method: 'PIX';
+  /**
+   * Valor da cobrança em centavos (ex: 4000 = R$ 40,00)
+   */
+  brCode: string;
+  /**
+   * Código PIX (copia-e-cola) para pagamento.
+   */
+  brCodeBase64: string;
+  /**
+   * Taxa da plataforma em centavos. Exemplo: `80` significa R$ 0,80.
+   */
+  platformFee: 80;
+  /**
+   * Descrição da cobrança.
+   */
+  description: string;
+  /**
+   * Data e hora da criação da cobrança.
+   */
+  createdAt: string;
+  /**
+   * Última atualização da cobrança.
+   */
+  updatedAt: string;
+  /**
+   * Data e hora de expiração do QRCode.
+   */
+  expiresAt: string;
+};
+
+export type CreatePixQrCodeData = {
+  /**
+   * Valor da cobrança em centavos (ex: 4000 = R$ 40,00)
+   */
+  amount: number;
+  /**
+   * Quantidade de segundos para o QrCode expirar
+   */
+  expiresIn: number;
+  /**
+   * Descrição da cobrança
+   */
+  description: string;
+  /**
+   * Dados do cliente caso deseje especificar
+   */
+  customer?: CreateCustomerData;
+};
+
+export type CreatePixQrCodeResponse =
+  | {
+      error: string;
+    }
+  | {
+      error: null;
+      data: IPixQrCode;
+    };
+
 export interface IAbacatePay {
   billing: IAbacatePayBilling;
   customer: IAbacatePayCustomerBilling;
   coupon: IAbacatePayCoupon;
+  pixQrCode: IPixQrCode;
 }
