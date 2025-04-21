@@ -192,7 +192,7 @@ export default function AbacatePay(apiKey: string) {
        *
        * @param data Dados do QRCode Pix
        * @returns Dados do QRCode Pix ou erro
-       * @see https://docs.abacatepay.com/pages/pix-qrcode/create
+       * @see https://docs.abacatepay.com/pages/pix-qrcode/check
        * @example
        * ```ts
        * const abacatePay = Abacate('apiKey');
@@ -212,7 +212,7 @@ export default function AbacatePay(apiKey: string) {
        *
        * @param data Simula o pagamento de um QRCode Pix criado no modo de desenvolvimento.
        * @returns Dados do QRCode Pix ou erro
-       * @see https://docs.abacatepay.com/pages/pix-qrcode/create
+       * @see https://docs.abacatepay.com/pages/pix-qrcode/simulate-payment
        * @example
        * ```ts
        * const abacatePay = Abacate('apiKey');
