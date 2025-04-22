@@ -1,5 +1,11 @@
 # abacatepay-nodejs-sdk
 
+## 1.3.0
+
+### Minor Changes
+
+- Add Pix QRCode
+
 ## 1.2.1
 
 ### Patch Changes

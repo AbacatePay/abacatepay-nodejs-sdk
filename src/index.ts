@@ -8,6 +8,7 @@ import type {
   CreateCouponResponse,
   CreateCustomerData,
   CreateCustomerResponse,
+  CreatePixQrCodeResponse,
   ListBillingResponse,
   ListCustomerResponse,
 } from './types';
@@ -154,6 +155,76 @@ export default function AbacatePay(apiKey: string) {
        */
       create(data: CreateCouponData): Promise<CreateCouponResponse> {
         return request('/coupon/create', {
+          method: 'POST',
+          body: JSON.stringify(data),
+        });
+      },
+    },
+    pixQrCode: {
+      /**
+       * Permite que você crie um código copia-e-cola e um QRCode Pix para seu cliente fazer o pagamento.
+       *
+       * @param data Dados do QRCode Pix
+       * @returns Dados do QRCode Pix criado ou erro
+       * @see https://docs.abacatepay.com/pages/pix-qrcode/create
+       * @example
+       * ```ts
+       * const pixQrCodeData = {
+       *  amount: 1000,
+       *  description: 'pagamento via AbacatePay',
+       *  expiresIn: 3600,
+       * };
+       *
+       * const abacatePay = Abacate('apiKey');
+       *
+       * const response = await abacatePay.pixQrCode.create(pixQrCodeData);
+       * /* ... * /
+       * ```
+       */
+      create(data: CreateCouponData): Promise<CreatePixQrCodeResponse> {
+        return request('/pixQrCode/create', {
+          method: 'POST',
+          body: JSON.stringify(data),
+        });
+      },
+      /**
+       * Checar status do pagamento do QRCode Pix.
+       *
+       * @param data Dados do QRCode Pix
+       * @returns Dados do QRCode Pix ou erro
+       * @see https://docs.abacatepay.com/pages/pix-qrcode/check
+       * @example
+       * ```ts
+       * const abacatePay = Abacate('apiKey');
+       *
+       * const response = await abacatePay.pixQrCode.check('pix_charabc123456789');
+       * /* ... * /
+       * ```
+       */
+      check(data: CreateCouponData): Promise<CreatePixQrCodeResponse> {
+        return request('/pixQrCode/check', {
+          method: 'POST',
+          body: JSON.stringify(data),
+        });
+      },
+      /**
+       * Checar status do pagamento do QRCode Pix.
+       *
+       * @param data Simula o pagamento de um QRCode Pix criado no modo de desenvolvimento.
+       * @returns Dados do QRCode Pix ou erro
+       * @see https://docs.abacatepay.com/pages/pix-qrcode/simulate-payment
+       * @example
+       * ```ts
+       * const abacatePay = Abacate('apiKey');
+       *
+       * const response = await abacatePay.pixQrCode.simulatePayment('pix_char_abc123456789');
+       * /* ... * /
+       * ```
+       */
+      simulatePayment(
+        data: CreateCouponData,
+      ): Promise<CreatePixQrCodeResponse> {
+        return request('/pixQrCode/simulate-payment', {
           method: 'POST',
           body: JSON.stringify(data),
         });
