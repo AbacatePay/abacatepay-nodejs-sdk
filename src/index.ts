@@ -9,8 +9,8 @@ import type {
   ListCustomerResponse,
 } from './types';
 
- function AbacatePay(apiKey: string) {
-  if (!apiKey) throw new AbacatePayError("API key is required!");
+function AbacatePay(apiKey: string) {
+  if (!apiKey) throw new AbacatePayError('API key is required!');
   const request = createRequest(apiKey);
 
   return {
@@ -67,11 +67,7 @@ import type {
   };
 }
 
-
-export { 
-  AbacatePayError,
-  AbacatePay
-};
+export { AbacatePayError, AbacatePay };
 
 /**
  * @deprecated Use named imports instead
