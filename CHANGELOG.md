@@ -1,5 +1,11 @@
 # abacatepay-nodejs-sdk
 
+## 1.3.1
+
+### Patch Changes
+
+- Fix pixQrcode types
+
 ## 1.3.0
 
 ### Minor Changes
