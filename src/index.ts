@@ -8,6 +8,7 @@ import type {
   CreateCouponResponse,
   CreateCustomerData,
   CreateCustomerResponse,
+  CreatePixQrCodeData,
   CreatePixQrCodeResponse,
   ListBillingResponse,
   ListCustomerResponse,
@@ -181,7 +182,7 @@ export default function AbacatePay(apiKey: string) {
        * /* ... * /
        * ```
        */
-      create(data: CreateCouponData): Promise<CreatePixQrCodeResponse> {
+      create(data: CreatePixQrCodeData): Promise<CreatePixQrCodeResponse> {
         return request('/pixQrCode/create', {
           method: 'POST',
           body: JSON.stringify(data),
@@ -201,7 +202,7 @@ export default function AbacatePay(apiKey: string) {
        * /* ... * /
        * ```
        */
-      check(data: CreateCouponData): Promise<CreatePixQrCodeResponse> {
+      check(data: CreatePixQrCodeData): Promise<CreatePixQrCodeResponse> {
         return request('/pixQrCode/check', {
           method: 'POST',
           body: JSON.stringify(data),
@@ -222,7 +223,7 @@ export default function AbacatePay(apiKey: string) {
        * ```
        */
       simulatePayment(
-        data: CreateCouponData,
+        data: CreatePixQrCodeData,
       ): Promise<CreatePixQrCodeResponse> {
         return request('/pixQrCode/simulate-payment', {
           method: 'POST',
