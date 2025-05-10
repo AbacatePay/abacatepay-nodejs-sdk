@@ -1,14 +1,32 @@
-# abacatepay-nodejs-sdk
+<p align="center">
+  <img src="https://github.com/AbacatePay/abacatepay-nodejs-sdk/blob/temp/assets/branco.png?raw=true#gh-light-mode-only" alt="AbacatePay SDK">
+  <img src="https://github.com/AbacatePay/abacatepay-nodejs-sdk/blob/temp/assets/preto.png?raw=true#gh-dark-mode-only" alt="AbacatePay SDK">
+</p>
+<p align="center">
+  <a href="https://www.npmjs.com/package/abacatepay-nodejs-sdk">
+    <img alt="npm version" src="https://img.shields.io/npm/v/abacatepay-nodejs-sdk/1.3.1">
+  </a>
+  <a href="https://github.com/AbacatePay/abacatepay-nodejs-sdk/actions">
+    <img alt="Build Status" src="https://img.shields.io/badge/build-passing-brightgreen">
+  </a>
+  <a href="https://codecov.io/gh/AbacatePay/abacatepay-nodejs-sdk">
+    <img alt="Test Coverage" src="https://img.shields.io/badge/coverage-80%25-yellow">
+  </a>
+</p>
 
-Official NodeJS SDK for AbacatePay - Accept payments in seconds with a simple integration.
+&nbsp;
 
-## Installation
+## AbacatePay Nodejs SDK
+
+SDK oficial da AbacatePay - Aceite pagamentos em segundos com uma integração simples.
+
+## Instalação
 
 ```bash
 npm install abacatepay-nodejs-sdk
 ```
 
-## Quick Start
+## Uso Rápido
 
 ```js
 import AbacatePay from 'abacatepay-nodejs-sdk';
@@ -17,9 +35,7 @@ import AbacatePay from 'abacatepay-nodejs-sdk';
 const abacate = AbacatePay('your_api_key');
 ```
 
-## Usage
-
-### Creating a Payment
+### Criando um Pagamento
 
 ```js
 // Create a one-time payment
@@ -42,7 +58,7 @@ const billing = await abacate.billing.create({
 });
 ```
 
-### Response
+### Resposta
 
 ```js
 {
@@ -65,12 +81,19 @@ const billing = await abacate.billing.create({
 }
 ```
 
-## Payment Methods
+## Métodos de Pagamento
 
-Currently supported payment methods:
-- PIX (Instant Brazilian payment system)
+Métodos de pagamento atualmente suportados:
+- PIX (Sistema de pagamento instantâneo brasileiro)
 
+## Contribuindo
 
-## License
+Este é um projeto open source. Antes de contribuir, por favor leia o nosso [Guia de Contribuição](https://rafaelcostappz.github.io/abct/#/languages/nodejs/CONTRIBUTING).
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Segurança
+
+Caso identifique alguma vulnerabilidade, consulte a nossa [Política de Segurança](https://rafaelcostappz.github.io/abct/#/policies/SECURITY_POLICY) para saber como reportar de forma responsável.
+
+## Licença
+
+Este projeto é licenciado sob os termos da [Licença MIT](LICENSE).

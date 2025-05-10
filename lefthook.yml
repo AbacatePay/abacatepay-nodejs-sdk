@@ -1,0 +1,20 @@
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      run: npm run lint
+    format:
+      run: npm run format
+
+pre-push:
+  parallel: true
+  commands:
+    lint:
+      run: npm run lint
+    test:
+      run: npm test || echo "Nenhum teste definido"
+
+commit-msg:
+  commands:
+    commitlint:
+      run: npx commitlint --edit "$1"

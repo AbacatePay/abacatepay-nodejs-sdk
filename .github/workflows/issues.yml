@@ -1,0 +1,24 @@
+name: Validate and Close Issue
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate and Close
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          body=$(jq -r '.issue.body' "$GITHUB_EVENT_PATH")
+          number=$(jq -r '.issue.number' "$GITHUB_EVENT_PATH")
+
+          count=$(echo "$body" | grep -Ec '^\s*### \*') || true
+
+          (( count < 4 )) && curl -s -X POST -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -d "{\"body\": \"A issue não está em conformidade com nossos padrões.\", \"state\": \"closed\"}" \
+                "https://api.github.com/repos/${{ github.repository }}/issues/$number" || true

@@ -1,0 +1,42 @@
+name: "Lint PR Title"
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - reopened
+
+jobs:
+  validate-title:
+    name: Validate PR title
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5
+        with:
+          types: |
+            feat
+            fix
+            chore
+            docs
+            release
+            refactor
+            test
+          ignoreLabels: |
+            bot
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  validate-body:
+    name: Ceck PR body is not empty
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    steps:
+      - uses: JJ/github-pr-contains-action@releases/v14.1
+        with:
+         github-token: ${{ secrets.GITHUB_TOKEN }}
+         bodyDosNotContains: '^\\s*$'
+         waivedUsers: 'dependabot[bot]|bot'

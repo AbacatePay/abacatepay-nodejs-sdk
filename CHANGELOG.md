@@ -1,50 +1,25 @@
-# abacatepay-nodejs-sdk
+# @coelho38r/abct01
 
-## 1.3.1
+## 5.1.2
 
 ### Patch Changes
 
-- Fix pixQrcode types
+- b62914f: primeiro patch oficial
 
-## 1.3.0
+## 5.1.1
+
+### Patch Changes
+
+- 44960a4: primeiro patch
+
+## 5.1.0
 
 ### Minor Changes
 
-- Add Pix QRCode
+- 0748e70: primeira versao minor
 
-## 1.2.1
-
-### Patch Changes
-
-- Sync NPM version with git tags
-
-## 1.2.0
-
-### Minor Changes
-
-- 8afe53c: Add functionality to create discount coupons.
+## 5.0.2
 
 ### Patch Changes
 
-- - Update API contracts
-  - Add Coupon module
-  - Add Billing creation in `MULTIPLE_PAYMENTS` mode
-
-## 1.1.1
-
-### Patch Changes
-
-- c0b777f: Add JSDoc comments for improved documentation
-
-## 1.1.0
-
-### Minor Changes
-
-- Fix API contracts
-- List and create customers
-
-## 1.0.1
-
-### Patch Changes
-
-- This adds better typescript support, prevents of importing package.json and better build pipeline overall
+- e814cdc: novo path
