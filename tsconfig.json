@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		/* Target JavaScript version */
+		"target": "es2016",
+
+		/* Module system */
+		"module": "commonjs",
+
+		/* Import compatibilidade com CommonJS */
+		"esModuleInterop": true,
+
+		/* Verifica diferenciação entre maiúsculas/minúsculas nos caminhos */
+		"forceConsistentCasingInFileNames": true,
+
+		/* Ativa todas as verificações de tipo estritas */
+		"strict": true,
+
+		/* Pula verificação de arquivos .d.ts */
+		"skipLibCheck": true
+	}
+}
