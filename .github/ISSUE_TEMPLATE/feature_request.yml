@@ -1,0 +1,29 @@
+name: "🚀 Solicitação de Recurso"
+description: Sugira uma melhoria ou nova funcionalidade.
+title: "[FEATURE] - "
+labels: ["enhancement"]
+
+body:
+  - type: textarea
+    id: proposta
+    attributes:
+      label: "Descrição da proposta"
+      description: "Explique a funcionalidade desejada e o porquê."
+    validations:
+      required: true
+
+  - type: textarea
+    id: contexto
+    attributes:
+      label: "Contexto adicional"
+      description: "Existe alguma necessidade, problema ou motivo específico para essa funcionalidade?"
+
+  - type: checkboxes
+    id: impacto
+    attributes:
+      label: "Impacto esperado"
+      options:
+        - label: "Melhora significativa na usabilidade"
+        - label: "Facilita manutenção ou refatoração"
+        - label: "Reduz custo de desenvolvimento no longo prazo"
+        - label: "Outro (descrever acima)"

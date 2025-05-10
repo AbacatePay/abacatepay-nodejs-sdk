@@ -20,7 +20,7 @@ export default function AbacatePay(apiKey: string) {
 
   return {
     /**
-     * Gerencie suas cobranças.
+     * Gerencisdjasio jaos:ie suas cobranças.
      */
     billing: {
       /**

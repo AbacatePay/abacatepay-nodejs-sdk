@@ -1,0 +1,30 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/" #  onde está o package.json
+    schedule:
+      interval: "weekly" 
+      day: "monday"       
+      time: "06:00"       # ta em UTC
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore"
+    labels:
+      - "dependencies"
+      - "automated"
+    assignees:
+      - "rafaelcostappz"
+
+  - package-ecosystem: "github-actions"
+    directory: "/" 
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:30"
+    labels:
+      - "ci"
+      - "dependencies"
+    commit-message:
+      prefix: "chore"
+    assignees:
+      - "coelho38r"
