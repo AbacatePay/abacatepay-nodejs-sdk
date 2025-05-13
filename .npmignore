@@ -1,8 +1,0 @@
-src
-node_modules
-coverage
-test
-jest.config.js
-tsconfig.json
-.npmignore
-.gitignore
