@@ -1,6 +1,6 @@
-# Contribution Guide - AbacatePay {LANGUAGE} SDK
+# Contribution Guide - AbacatePay NodeJS SDK
 
-First and foremost, thank you for considering contributing to the AbacatePay {LANGUAGE} SDK! We truly appreciate your time and effort in helping make our SDKs even better.
+First and foremost, thank you for considering contributing to the AbacatePay NodeJS SDK! We truly appreciate your time and effort in helping make our SDKs even better.
 
 This guide presents a set of guidelines for contributing to this project. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
