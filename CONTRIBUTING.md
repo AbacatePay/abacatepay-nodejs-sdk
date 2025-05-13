@@ -20,7 +20,7 @@ This guide presents a set of guidelines for contributing to this project. These 
 
 ## Code of Conduct
 
-This project and everyone participating in it is governed by the [AbacatePay Code of Conduct](./CODE_OF_CONDUCT.md) (or the link to the centralized `CODE_OF_CONDUCT.md` file, if applicable). By participating, you are expected to uphold this code. Please report unacceptable behavior to [EMAIL_TO_REPORT_CODE_OF_CONDUCT_VIOLATIONS].
+This project and everyone participating in it is governed by the [AbacatePay Code of Conduct](./CODE_OF_CONDUCT.md) (or the link to the centralized `CODE_OF_CONDUCT.md` file, if applicable). By participating, you are expected to uphold this code. Please report unacceptable behavior to suport@abacatepay.com.
 
 A respectful and collaborative environment is fundamental.
 
