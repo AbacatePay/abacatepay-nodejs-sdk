@@ -1,6 +1,6 @@
 # Contribution Guide - AbacatePay NodeJS SDK
 
-First and foremost, thank you for considering contributing to the AbacatePay nodejsSDK! We truly appreciate your time and effort in helping make our SDKs even better.
+First and foremost, thank you for considering contributing to the AbacatePay NodeJS SDK! We truly appreciate your time and effort in helping make our SDKs even better.
 
 This guide presents a set of guidelines for contributing to this project. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
@@ -57,8 +57,8 @@ Not sure where to start? You can look for issues tagged with `good first issue` 
 
 1.  **Open an Issue:** As mentioned, this is the mandatory first step.
 2.  **Fork and Clone the Repository:**
-    *   Fork the `AbacatePay/abacatepay-{language}-sdk` repository to your personal GitHub account.
-    *   Clone your fork locally: `git clone https://github.com/YOUR_USERNAME/abacatepay-{language}-sdk.git`
+    *   Fork the `AbacatePay/abacatepay-nodejs-sdk` repository to your personal GitHub account.
+    *   Clone your fork locally: `git clone https://github.com/YOUR_USERNAME/abacatepay-nodejs-sdk.git`
 3.  **Create a Branch:**
     *   Navigate to your local clone's directory.
     *   Create a new branch from the `develop` branch (this is our main development branch) . **Direct Pull Requests to `main` are not allowed.**
@@ -101,7 +101,7 @@ Not sure where to start? You can look for issues tagged with `good first issue` 
         ```
 10. **Submit the Pull Request (PR) :**
     *   Push your branch to your fork on GitHub: `git push origin your-branch-name`.
-    *   Open a Pull Request on GitHub from your branch in your fork to the `develop` branch of the `AbacatePay/abacatepay-{language}-sdk` repository.
+    *   Open a Pull Request on GitHub from your branch in your fork to the `develop` branch of the `AbacatePay/abacatepay-nodejs-sdk` repository.
     *   Fill out the provided Pull Request template, detailing your changes, the related Issue, and the verification checklist.
 
 ## Semantic Versioning (when using Changesets)
