@@ -1,0 +1,48 @@
+name: "🐞 Reportar Bug"
+description: Informe um problema que você encontrou no projeto.
+title: "[BUG] - "
+labels: ["bug"]
+
+body:
+  - type: textarea
+    id: descricao
+    attributes:
+      label: "Descrição do prblema"
+      description: "Explique de forma clara e concisa o que está acontecendo."
+    validations:
+      required: true
+
+  - type: textarea
+    id: passos
+    attributes:
+      label: "Passos para reproduzir"
+      description: "Liste os passos para reproduzir o problema."
+      placeholder: |
+        1. Vá para '...'
+        2. Clique em '...'
+        3. Role até '...'
+        4. Veja o erro
+    validations:
+      required: true
+
+  - type: textarea
+    id: comportamento_esperado
+    attributes:
+      label: "Comportamento esperado"
+      description: "Descreva o que era esperado acontecer."
+    validations:
+      required: true
+
+  - type: input
+    id: ambiente
+    attributes:
+      label: "Ambiente"
+      description: "Informe o sistema operacional, navegador ou versão da lib/API envolvida"
+      placeholder: "Ex: Fedora 41, Node 20.11.1"
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: "Logs relevantes"
+      description: "Cole aqui logs que possam ajudar a entender o problema."
+      render: shell
