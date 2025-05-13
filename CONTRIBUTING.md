@@ -1,6 +1,6 @@
-# Contribution Guide - AbacatePay NodeJS SDK
+# Contribution Guide - AbacatePay {LANGUAGE} SDK
 
-First and foremost, thank you for considering contributing to the AbacatePay NodeJS SDK! We truly appreciate your time and effort in helping make our SDKs even better.
+First and foremost, thank you for considering contributing to the AbacatePay {LANGUAGE} SDK! We truly appreciate your time and effort in helping make our SDKs even better.
 
 This guide presents a set of guidelines for contributing to this project. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
@@ -20,7 +20,7 @@ This guide presents a set of guidelines for contributing to this project. These 
 
 ## Code of Conduct
 
-This project and everyone participating in it is governed by the [AbacatePay Code of Conduct](./CODE_OF_CONDUCT.md) (or the link to the centralized `CODE_OF_CONDUCT.md` file, if applicable). By participating, you are expected to uphold this code. Please report unacceptable behavior to [EMAIL_TO_REPORT_CODE_OF_CONDUCT_VIOLATIONS]. A respectful and collaborative environment is fundamental.
+This project and everyone participating in it is governed by the [AbacatePay Code of Conduct](./CODE_OF_CONDUCT.md) (or the link to the centralized `CODE_OF_CONDUCT.md` file, if applicable). By participating, you are expected to uphold this code. Please report unacceptable behavior to [suport@abacatepay.com]. A respectful and collaborative environment is fundamental.
 
 ## Before You Start: The Importance of Issues
 
@@ -96,7 +96,7 @@ Not sure where to start? You can look for issues tagged with `good first issue` 
 9.  **Keep Your Branch Updated:**
     *   Before submitting the PR, update your branch with the `develop` branch from the original (`upstream`) repository to incorporate the latest changes and resolve potential conflicts.
         ```bash
-        git fetch upstream # If you haven't configured upstream: git remote add upstream https://github.com/AbacatePay/abacatepay-{language}-sdk.git
+        git fetch upstream # If you haven't configured upstream: git remote add upstream https://github.com/AbacatePay/abacatepay-nodejs-sdk.git
         git rebase upstream/develop
         ```
 10. **Submit the Pull Request (PR) :**
