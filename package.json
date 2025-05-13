@@ -11,19 +11,10 @@
     "type": "git",
     "url": "https://github.com/rafaelcoelhox/abct0.git"
   },
-  "keywords": [
-    "sdk",
-    "typescript",
-    "abacatepay",
-    "nodejs",
-    "api-client"
-  ],
+  "keywords": ["sdk", "typescript", "abacatepay", "nodejs", "api-client"],
   "author": "Christopher Ribeiro <christo_campiglia@hotmail.com>",
   "license": "MIT",
-  "files": [
-    "dist",
-    "README.md"
-  ],
+  "files": ["dist", "README.md"],
   "scripts": {
     "prebuild": "node -p \"'/*This file is auto generated during build, DO NOT CHANGE OR MODIFY */\\n\\nexport const ABACATE_PAY_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
     "build": "tsup ./src --out-dir ./dist --format cjs,esm --dts --silent --no-splitting --clean",
@@ -44,7 +35,6 @@
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
     "@types/jest": "^29.5.14",
-    "biome": "^0.3.3",
     "jest": "^29.7.0",
     "lefthook": "^1.11.12",
     "open-cli": "^8.0.0",
