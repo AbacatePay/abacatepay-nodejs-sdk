@@ -1,6 +1,6 @@
-# Contribution Guide - AbacatePay {LANGUAGE} SDK
+# Contribution Guide - AbacatePay NodeJS SDK
 
-First and foremost, thank you for considering contributing to the AbacatePay {LANGUAGE} SDK! We truly appreciate your time and effort in helping make our SDKs even better.
+First and foremost, thank you for considering contributing to the AbacatePay nodejsSDK! We truly appreciate your time and effort in helping make our SDKs even better.
 
 This guide presents a set of guidelines for contributing to this project. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
@@ -64,7 +64,7 @@ Not sure where to start? You can look for issues tagged with `good first issue` 
     *   Create a new branch from the `develop` branch (this is our main development branch) . **Direct Pull Requests to `main` are not allowed.**
         ```bash
         git checkout develop
-        git pull origin develop # Ensure your local develop is up-to-date
+        git pull origin develop --rebase # Ensure your local develop is up-to-date
         git checkout -b your-branch-name # Ex: feature/new-client-api or fix/bug-123
         ```
 4.  **Set Up Environment and Install Dependencies:**
