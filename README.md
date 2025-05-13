@@ -1,15 +1,24 @@
-# abacatepay-nodejs-sdk
+<p align="center">
+  <img src="https://github.com/rafaelcoelhox/abct0/blob/main/assets/branco.png?raw=true#gh-light-mode-only" alt="AbacatePay SDK" height="140" style="max-width: 100%;">
+  <img src="https://github.com/rafaelcoelhox/abct0/blob/main/assets/preto.png?raw=true#gh-dark-mode-only" alt="AbacatePay SDK" height="140" style="max-width: 100%;">
+</p>
 
-Official NodeJS SDK for AbacatePay - Accept payments in seconds with a simple integration.
+<p align="center">
+  <img alt="npm version" src="https://img.shields.io/npm/v/abacatepay-nodejs-sdk/1.3.1">
+  <img alt="Build Status" src="https://img.shields.io/badge/build-passing-brightgreen">
+  <img alt="Test Coverage" src="https://img.shields.io/badge/coverage-80%25-yellow">
+</p>
+
+
+## AbacatePay Node.js SDK
+Official AbacatePay SDK - Accept payments in seconds with a simple integration.
 
 ## Installation
-
 ```bash
 npm install abacatepay-nodejs-sdk
 ```
 
-## Quick Start
-
+## Quick Usage
 ```js
 import AbacatePay from 'abacatepay-nodejs-sdk';
 
@@ -17,10 +26,7 @@ import AbacatePay from 'abacatepay-nodejs-sdk';
 const abacate = AbacatePay('your_api_key');
 ```
 
-## Usage
-
 ### Creating a Payment
-
 ```js
 // Create a one-time payment
 const billing = await abacate.billing.create({
@@ -35,7 +41,7 @@ const billing = await abacate.billing.create({
     }
   ],
   returnUrl: "https://yoursite.com/app",
-  completionUrl: "https://yoursite.com/pagamento/sucesso",
+  completionUrl: "https://yoursite.com/payment/success",
   customer: {
     email: 'customer@example.com'
   }
@@ -43,10 +49,9 @@ const billing = await abacate.billing.create({
 ```
 
 ### Response
-
 ```js
 {
-  _id: 'bill_12345667',
+  id: 'bill_12345667',
   url: 'https://abacatepay.com/pay/bill_12345667', // Payment URL for your customer
   amount: 1000,
   status: 'PENDING',
@@ -66,11 +71,8 @@ const billing = await abacate.billing.create({
 ```
 
 ## Payment Methods
-
 Currently supported payment methods:
-- PIX (Instant Brazilian payment system)
-
+- PIX (Brazilian instant payment system)
 
 ## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the terms of the MIT License.
