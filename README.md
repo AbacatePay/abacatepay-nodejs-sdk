@@ -1,6 +1,6 @@
 <p align="center">
-  <img src="https://github.com/rafaelcoelhox/abct0/blob/main/assets/branco.png?raw=true#gh-light-mode-only" alt="AbacatePay SDK" style="max-width: 100%;">
-  <img src="https://github.com/rafaelcoelhox/abct0/blob/main/assets/preto.png?raw=true#gh-dark-mode-only" alt="AbacatePay SDK" style="max-width: 100%;">
+  <img src="https://github.com/rafaelcoelhox/abct0/blob/main/assets/branco.png?raw=true#gh-light-mode-only" alt="AbacatePay SDK" height="170" style="max-width: 100%;">
+  <img src="https://github.com/rafaelcoelhox/abct0/blob/main/assets/preto.png?raw=true#gh-dark-mode-only" alt="AbacatePay SDK" height="170" style="max-width: 100%;">
 </p>
 
 <p align="center">
