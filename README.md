@@ -2,8 +2,8 @@
   <img src="https://github.com/rafaelcoelhox/abct0/blob/main/assets/branco.png?raw=true#gh-light-mode-only" alt="AbacatePay SDK" height="150" style="max-width: 100%;">
   <img src="https://github.com/rafaelcoelhox/abct0/blob/main/assets/preto.png?raw=true#gh-dark-mode-only" alt="AbacatePay SDK" height="150" style="max-width: 100%;">
 </p>
-
-<p align="center">
+&nbsp;
+<p align="center" style=style="margin-top">
   <img alt="npm version" src="https://img.shields.io/npm/v/abacatepay-nodejs-sdk/1.3.1">
   <img alt="Build Status" src="https://img.shields.io/badge/build-passing-brightgreen">
   <img alt="Test Coverage" src="https://img.shields.io/badge/coverage-80%25-yellow">
