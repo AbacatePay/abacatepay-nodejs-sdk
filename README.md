@@ -1,6 +1,6 @@
 <p align="center">
-  <img src="https://github.com/AbacatePay/abacatepay-nodejs-sdk/blob/main/assets/branco.png?raw=true#gh-light-mode-only" alt="AbacatePay SDK" height="150" style="max-width: 100%;">
-  <img src="https://github.com/AbacatePay/abacatepay-nodejs-sdk/blob/main/assets/preto.png?raw=true#gh-dark-mode-only" alt="AbacatePay SDK" height="150" style="max-width: 100%;">
+  <img src="https://github.com/AbacatePay/abacatepay-nodejs-sdk/blob/main/assets/branco.png?raw=true#gh-light-mode-only" alt="AbacatePay SDK"  style="max-width: 100%;">
+  <img src="https://github.com/AbacatePay/abacatepay-nodejs-sdk/blob/main/assets/preto.png?raw=true#gh-dark-mode-only" alt="AbacatePay SDK" style="max-width: 100%;">
 </p>
 &nbsp;
 <p align="center" style=style="margin-top">
