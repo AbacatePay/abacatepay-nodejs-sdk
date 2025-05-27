@@ -204,7 +204,7 @@ export default function AbacatePay(apiKey: string) {
        */
       check(data: CreatePixQrCodeData): Promise<CreatePixQrCodeResponse> {
         return request('/pixQrCode/check', {
-          method: 'POST',
+          method: 'GET',
           body: JSON.stringify(data),
         });
       },
