@@ -194,7 +194,7 @@ describe("AbacatePay", () => {
       const result = await sdk.pixQrCode.check(pixQrCodeData);
 
       expect(mockRequest).toHaveBeenCalledWith("/pixQrCode/check", {
-        method: "POST",
+        method: "GET",
         body: JSON.stringify(pixQrCodeData),
       });
       expect(result).toEqual({ data: "pix-qrcode-status" });
