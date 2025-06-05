@@ -222,10 +222,10 @@ export default function AbacatePay(apiKey: string) {
        * /* ... * /
        * ```
        */
-      simulatePayment(data: PixIdParams): Promise<CreatePixQrCodeResponse> {
+      simulatePayment(data: PixIdParams, metadata: Record<string, unknown> = {}): Promise<CreatePixQrCodeResponse> {
         return request(`/pixQrCode/simulate-payment?id=${data.id}`, {
           method: 'POST',
-          body: JSON.stringify({ metadata: {} }),
+          body: JSON.stringify({ metadata }),
         });
       }
     },
