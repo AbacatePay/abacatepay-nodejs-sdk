@@ -12,6 +12,7 @@ import type {
   CreatePixQrCodeResponse,
   ListBillingResponse,
   ListCustomerResponse,
+  PixIdParams,
 } from './types';
 
 export default function AbacatePay(apiKey: string) {
@@ -202,10 +203,9 @@ export default function AbacatePay(apiKey: string) {
        * /* ... * /
        * ```
        */
-      check(data: CreatePixQrCodeData): Promise<CreatePixQrCodeResponse> {
-        return request('/pixQrCode/check', {
-          method: 'POST',
-          body: JSON.stringify(data),
+      check(data: PixIdParams): Promise<CreatePixQrCodeResponse> {
+        return request(`/pixQrCode/check?id=${data.id}`, {
+          method: 'GET',
         });
       },
       /**
@@ -222,14 +222,12 @@ export default function AbacatePay(apiKey: string) {
        * /* ... * /
        * ```
        */
-      simulatePayment(
-        data: CreatePixQrCodeData,
-      ): Promise<CreatePixQrCodeResponse> {
-        return request('/pixQrCode/simulate-payment', {
+      simulatePayment(data: PixIdParams, metadata: Record<string, unknown> = {}): Promise<CreatePixQrCodeResponse> {
+        return request(`/pixQrCode/simulate-payment?id=${data.id}`, {
           method: 'POST',
-          body: JSON.stringify(data),
+          body: JSON.stringify({ metadata }),
         });
-      },
+      }
     },
   };
 }

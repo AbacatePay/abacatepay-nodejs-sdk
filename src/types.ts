@@ -444,6 +444,13 @@ export type CreatePixQrCodeData = {
   customer?: CreateCustomerData;
 };
 
+/**
+ * Parâmetros para verificar o status do pagamento do QRCode Pix e simular pagamento do QRCode Pix
+ */
+export type PixIdParams = {
+  id: string;
+};
+
 export type CreatePixQrCodeResponse =
   | {
       error: string;
