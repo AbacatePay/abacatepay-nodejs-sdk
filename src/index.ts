@@ -1,5 +1,5 @@
-import { AbacatePayError } from './exceptions';
-import { createRequest } from './requests';
+import { AbacatePayError } from "./exceptions";
+import { createRequest } from "./requests";
 import type {
   CreateBillingData,
   CreateBillingLinkData,
@@ -12,10 +12,10 @@ import type {
   CreatePixQrCodeResponse,
   ListBillingResponse,
   ListCustomerResponse,
-} from './types';
+} from "./types";
 
 export default function AbacatePay(apiKey: string) {
-  if (!apiKey) throw new AbacatePayError('API key is required!');
+  if (!apiKey) throw new AbacatePayError("API key is required!");
   const request = createRequest(apiKey);
 
   return {
@@ -59,8 +59,8 @@ export default function AbacatePay(apiKey: string) {
        * /* ... * /
        */
       create(data: CreateBillingData): Promise<CreateBillingResponse> {
-        return request('/billing/create', {
-          method: 'POST',
+        return request("/billing/create", {
+          method: "POST",
           body: JSON.stringify(data),
         });
       },
@@ -72,11 +72,11 @@ export default function AbacatePay(apiKey: string) {
        * @returns Dados da cobrança criada ou erro
        */
       createLink(data: CreateBillingLinkData): Promise<CreateBillingResponse> {
-        return request('/billing/create', {
-          method: 'POST',
+        return request("/billing/create", {
+          method: "POST",
           body: JSON.stringify({
             ...data,
-            frequency: 'MULTIPLE_PAYMENTS',
+            frequency: "MULTIPLE_PAYMENTS",
           }),
         });
       },
@@ -94,7 +94,7 @@ export default function AbacatePay(apiKey: string) {
        * /* ... * /
        */
       list(): Promise<ListBillingResponse> {
-        return request('/billing/list', { method: 'GET' });
+        return request("/billing/list", { method: "GET" });
       },
     },
     /**
@@ -123,8 +123,8 @@ export default function AbacatePay(apiKey: string) {
        * ```
        */
       create(data: CreateCustomerData): Promise<CreateCustomerResponse> {
-        return request('/customer/create', {
-          method: 'POST',
+        return request("/customer/create", {
+          method: "POST",
           body: JSON.stringify(data),
         });
       },
@@ -141,7 +141,7 @@ export default function AbacatePay(apiKey: string) {
        * /* ... * /
        */
       list(): Promise<ListCustomerResponse> {
-        return request('/customer/list', { method: 'GET' });
+        return request("/customer/list", { method: "GET" });
       },
     },
     /**
@@ -155,8 +155,8 @@ export default function AbacatePay(apiKey: string) {
        * @returns Dados do cupom criado ou erro
        */
       create(data: CreateCouponData): Promise<CreateCouponResponse> {
-        return request('/coupon/create', {
-          method: 'POST',
+        return request("/coupon/create", {
+          method: "POST",
           body: JSON.stringify(data),
         });
       },
@@ -183,8 +183,8 @@ export default function AbacatePay(apiKey: string) {
        * ```
        */
       create(data: CreatePixQrCodeData): Promise<CreatePixQrCodeResponse> {
-        return request('/pixQrCode/create', {
-          method: 'POST',
+        return request("/pixQrCode/create", {
+          method: "POST",
           body: JSON.stringify(data),
         });
       },
@@ -203,8 +203,8 @@ export default function AbacatePay(apiKey: string) {
        * ```
        */
       check(data: CreatePixQrCodeData): Promise<CreatePixQrCodeResponse> {
-        return request('/pixQrCode/check', {
-          method: 'POST',
+        return request("/pixQrCode/check", {
+          method: "POST",
           body: JSON.stringify(data),
         });
       },
@@ -225,8 +225,8 @@ export default function AbacatePay(apiKey: string) {
       simulatePayment(
         data: CreatePixQrCodeData,
       ): Promise<CreatePixQrCodeResponse> {
-        return request('/pixQrCode/simulate-payment', {
-          method: 'POST',
+        return request("/pixQrCode/simulate-payment", {
+          method: "POST",
           body: JSON.stringify(data),
         });
       },
