@@ -1,7 +1,6 @@
 // constants.test.ts
 import { BASE_URL, ABACATE_PAY_DOCS, DEFAULT_HEADERS } from "../src/constants";
 import { ABACATE_PAY_VERSION } from "../src/version";
-//teste
 describe("Constants", () => {
   describe("BASE_URL", () => {
     it("should have correct API base URL", () => {
