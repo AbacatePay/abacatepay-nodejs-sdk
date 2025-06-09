@@ -185,14 +185,16 @@ describe("AbacatePay", () => {
       const sdk = AbacatePay(apiKey);
       const pixQrCodeData = { id: "pix_char_abc123" };
 
-
       mockRequest.mockResolvedValue({ data: "pix-qrcode-status" });
 
       const result = await sdk.pixQrCode.check(pixQrCodeData);
 
-      expect(mockRequest).toHaveBeenCalledWith("/pixQrCode/check?id=pix_char_abc123", {
-        method: "GET",
-      });
+      expect(mockRequest).toHaveBeenCalledWith(
+        "/pixQrCode/check?id=pix_char_abc123",
+        {
+          method: "GET",
+        },
+      );
       expect(result).toEqual({ data: "pix-qrcode-status" });
     });
 
@@ -201,15 +203,20 @@ describe("AbacatePay", () => {
       const pixQrCodeData = { id: "pix_char_abc123" };
       const metadata = { source: "test" };
 
-
       mockRequest.mockResolvedValue({ data: "pix-qrcode-payment-simulated" });
 
-      const result = await sdk.pixQrCode.simulatePayment(pixQrCodeData, metadata);
+      const result = await sdk.pixQrCode.simulatePayment(
+        pixQrCodeData,
+        metadata,
+      );
 
-      expect(mockRequest).toHaveBeenCalledWith("/pixQrCode/simulate-payment?id=pix_char_abc123", {
-        method: "POST",
-        body: JSON.stringify({ metadata }),
-      });
+      expect(mockRequest).toHaveBeenCalledWith(
+        "/pixQrCode/simulate-payment?id=pix_char_abc123",
+        {
+          method: "POST",
+          body: JSON.stringify({ metadata }),
+        },
+      );
       expect(result).toEqual({ data: "pix-qrcode-payment-simulated" });
     });
   });

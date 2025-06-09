@@ -1,4 +1,4 @@
-import { BASE_URL, DEFAULT_HEADERS } from './constants';
+import { BASE_URL, DEFAULT_HEADERS } from "./constants";
 
 export function createRequest(
   apiKey: string,
