@@ -1,11 +1,11 @@
 export type BillingStatus =
-  | 'PENDING'
-  | 'EXPIRED'
-  | 'CANCELLED'
-  | 'PAID'
-  | 'REFUNDED';
-export type BillingMethods = 'PIX';
-export type BillingKind = 'ONE_TIME' | 'MULTIPLE_PAYMENTS';
+  | "PENDING"
+  | "EXPIRED"
+  | "CANCELLED"
+  | "PAID"
+  | "REFUNDED";
+export type BillingMethods = "PIX";
+export type BillingKind = "ONE_TIME" | "MULTIPLE_PAYMENTS";
 
 export type IBilling = {
   /**
@@ -181,7 +181,7 @@ export type CreateBillingData =
 
 export type CreateBillingLinkData = Pick<
   CreateBillingData,
-  'completionUrl' | 'methods' | 'products' | 'returnUrl'
+  "completionUrl" | "methods" | "products" | "returnUrl"
 > & {
   customer?: ICustomerMetadata;
   cutomerId?: string;
@@ -267,8 +267,8 @@ export interface IAbacatePayCustomerBilling {
   list(): Promise<ListCustomerResponse>;
 }
 
-export type CouponStatus = 'ACTIVE' | 'DELETED' | 'DISABLED';
-export type DiscountKind = 'PERCENTAGE' | 'FIXED';
+export type CouponStatus = "ACTIVE" | "DELETED" | "DISABLED";
+export type DiscountKind = "PERCENTAGE" | "FIXED";
 
 export type ICoupon = {
   /**
@@ -368,11 +368,11 @@ export interface IAbacatePayCoupon {
 }
 
 export type PixQrCodeStatus =
-  | 'PENDING'
-  | 'EXPIRED'
-  | 'CANCELLED'
-  | 'PAID'
-  | 'REFUNDED';
+  | "PENDING"
+  | "EXPIRED"
+  | "CANCELLED"
+  | "PAID"
+  | "REFUNDED";
 
 export type IPixQrCode = {
   /**
@@ -394,7 +394,7 @@ export type IPixQrCode = {
   /**
    * Método de pagamento.
    */
-  method: 'PIX';
+  method: "PIX";
   /**
    * Valor da cobrança em centavos (ex: 4000 = R$ 40,00)
    */
@@ -442,6 +442,13 @@ export type CreatePixQrCodeData = {
    * Dados do cliente caso deseje especificar
    */
   customer?: CreateCustomerData;
+};
+
+/**
+ * Parâmetros para verificar o status do pagamento do QRCode Pix e simular pagamento do QRCode Pix
+ */
+export type PixIdParams = {
+  id: string;
 };
 
 export type CreatePixQrCodeResponse =

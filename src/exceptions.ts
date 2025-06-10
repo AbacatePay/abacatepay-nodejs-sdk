@@ -1,4 +1,4 @@
-import { ABACATE_PAY_DOCS } from './constants';
+import { ABACATE_PAY_DOCS } from "./constants";
 
 /**
  * Default class for Abacate Pay exceptions and errors.
@@ -10,7 +10,7 @@ export class AbacatePayError extends Error {
     super(
       `Abacate Pay Error: ${message}\n\nPlease, refer to the documentation at: ${ABACATE_PAY_DOCS}`,
     );
-    this.name = 'AbacatePayError';
+    this.name = "AbacatePayError";
   }
 
   toJSON() {
