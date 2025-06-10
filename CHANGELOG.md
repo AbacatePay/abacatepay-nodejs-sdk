@@ -1,5 +1,11 @@
 # abacatepay-nodejs-sdk
 
+## 1.4.1
+
+### Patch Changes
+
+- 6b7b771: This patch fixes URL repository on NPM
+
 ## 1.4.0
 
 ### Minor Changes
