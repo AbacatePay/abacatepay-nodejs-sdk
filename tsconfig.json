@@ -21,18 +21,9 @@
     // Emit type declarations
     "declaration": true,
     // Include the DOM types
-    "lib": [
-      "es2022",
-      "dom",
-      "dom.iterable"
-    ]
+    "lib": ["es2022", "dom", "dom.iterable"]
   },
   // Include the necessary files for your project
-  "include": [
-    "./src/**/*.ts",
-    "./src/**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["./src/**/*.ts", "./src/**/*.tsx"],
+  "exclude": ["node_modules"]
 }
