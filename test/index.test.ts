@@ -1,5 +1,6 @@
 // index.test.ts
 import AbacatePay, { AbacatePayError } from "../src/index";
+import type { CreateBillingData } from "../src/types";
 import { createRequest } from "../src/requests";
 
 // Mocking the createRequest module
@@ -49,6 +50,9 @@ describe("AbacatePay", () => {
         completionUrl: "https://completion.url",
         customer: {
           email: "test@example.com",
+          name: "Test Customer",
+          cellphone: "1234567890",
+          taxId: "12345678901",
         },
       };
 
@@ -61,6 +65,105 @@ describe("AbacatePay", () => {
         body: JSON.stringify(billingData),
       });
       expect(result).toEqual({ data: "billing-created" });
+    });
+
+    it("should fail if customer name is not provided", async () => {
+      const sdk = AbacatePay(apiKey);
+      const billingData = {
+        frequency: "ONE_TIME" as const,
+        methods: ["PIX" as const],
+        products: [
+          {
+            externalId: "product-1",
+            name: "Test Product",
+            quantity: 1,
+            price: 1000,
+          },
+        ],
+        returnUrl: "https://return.url",
+        completionUrl: "https://completion.url",
+        customer: {
+          email: "test@example.com",
+          cellphone: "1234567890",
+          taxId: "12345678901",
+        },
+      };
+
+      mockRequest.mockRejectedValue({
+        error: "body/customer must have required property 'name'",
+      });
+
+      await expect(
+        sdk.billing.create(billingData as CreateBillingData),
+      ).rejects.toEqual({
+        error: "body/customer must have required property 'name'",
+      });
+    });
+
+    it("should fail if customer cellphone is not provided", async () => {
+      const sdk = AbacatePay(apiKey);
+      const billingData = {
+        frequency: "ONE_TIME" as const,
+        methods: ["PIX" as const],
+        products: [
+          {
+            externalId: "product-1",
+            name: "Test Product",
+            quantity: 1,
+            price: 1000,
+          },
+        ],
+        returnUrl: "https://return.url",
+        completionUrl: "https://completion.url",
+        customer: {
+          email: "test@example.com",
+          name: "Test Customer",
+          taxId: "12345678901",
+        },
+      };
+
+      mockRequest.mockRejectedValue({
+        error: "body/customer must have required property 'cellphone'",
+      });
+
+      await expect(
+        sdk.billing.create(billingData as CreateBillingData),
+      ).rejects.toEqual({
+        error: "body/customer must have required property 'cellphone'",
+      });
+    });
+
+    it("should fail if customer taxId is not provided", async () => {
+      const sdk = AbacatePay(apiKey);
+      const billingData = {
+        frequency: "ONE_TIME" as const,
+        methods: ["PIX" as const],
+        products: [
+          {
+            externalId: "product-1",
+            name: "Test Product",
+            quantity: 1,
+            price: 1000,
+          },
+        ],
+        returnUrl: "https://return.url",
+        completionUrl: "https://completion.url",
+        customer: {
+          email: "test@example.com",
+          name: "Test Customer",
+          cellphone: "1234567890",
+        },
+      };
+
+      mockRequest.mockRejectedValue({
+        error: "body/customer must have required property 'taxId'",
+      });
+
+      await expect(
+        sdk.billing.create(billingData as CreateBillingData),
+      ).rejects.toEqual({
+        error: "body/customer must have required property 'taxId'",
+      });
     });
 
     it("should have createLink method that calls request with correct parameters", async () => {
