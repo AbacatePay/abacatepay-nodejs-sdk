@@ -1,4 +1,4 @@
-name: "Lint PR Title"
+name: "Lint PR Title and Security Checks"
 
 on:
   pull_request_target:
@@ -30,13 +30,43 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   validate-body:
-    name: Ceck PR body is not empty
+    name: Check PR body for issue number
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read
     steps:
-      - uses: JJ/github-pr-contains-action@releases/v14.1
+      - uses: mshick/lint-pull-request-title-action@v1
         with:
-         github-token: ${{ secrets.GITHUB_TOKEN }}
-         bodyDosNotContains: '^\\s*$'
-         waivedUsers: 'dependabot[bot]|bot'
+          regex: ".*#\\d+.*"
+          failOnMissing: true
+          failOnWrong: true
+          body: true
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run npm audit
+        run: npm audit --audit-level=high
+        continue-on-error: true
+
+      - name: Run Snyk scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+
+
