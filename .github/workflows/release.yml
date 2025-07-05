@@ -1,3 +1,4 @@
+
 name: Release
 
 on:
@@ -20,6 +21,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -50,3 +53,5 @@ jobs:
       - name: Log publish (if happens)
         if: steps.changesets.outputs.published == 'true'
         run: echo "Package successfully published!"
+
+

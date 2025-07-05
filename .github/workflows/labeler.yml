@@ -1,0 +1,17 @@
+"area: core":
+  - "src/**"
+  - "lib/**"
+
+"area: tests":
+  - "test/**"
+  - "**/*.test.js"
+
+"area: docs":
+  - "README.md"
+  - "docs/**"
+
+"dependencies":
+  - "package.json"
+  - "package-lock.json"
+
+
