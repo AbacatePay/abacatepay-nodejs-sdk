@@ -43,7 +43,10 @@ const billing = await abacate.billing.create({
   returnUrl: "https://yoursite.com/app",
   completionUrl: "https://yoursite.com/payment/success",
   customer: {
-    email: 'customer@example.com'
+    email: 'customer@example.com',
+    name: "Test Customer",
+    cellphone: "1234567890",
+    taxId: "12345678901"
   }
 });
 ```
