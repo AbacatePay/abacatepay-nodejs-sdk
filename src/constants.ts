@@ -1,7 +1,8 @@
 import { ABACATE_PAY_VERSION } from "./version";
 
 export const BASE_URL = "https://api.abacatepay.com/v1";
-export const ABACATE_PAY_DOCS = "https://abacatepay.readme.io/reference";
+export const ABACATE_PAY_DOCS =
+  "https://docs.abacatepay.com/pages/introduction";
 export function DEFAULT_HEADERS(apiKey: string) {
   return {
     Authorization: `Bearer ${apiKey}`,
