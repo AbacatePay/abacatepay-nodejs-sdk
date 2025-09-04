@@ -10,8 +10,11 @@ import type {
   CreateCustomerResponse,
   CreatePixQrCodeData,
   CreatePixQrCodeResponse,
+  CreateWithdrawData,
+  CreateWithdrawResponse,
   ListBillingResponse,
   ListCustomerResponse,
+  ListWithdrawResponse,
   PixIdParams,
 } from "./types";
 
@@ -229,6 +232,52 @@ export default function AbacatePay(apiKey: string) {
         return request(`/pixQrCode/simulate-payment?id=${data.id}`, {
           method: "POST",
           body: JSON.stringify({ metadata }),
+        });
+      },
+    },
+    withdraw: {
+      /**
+       * Permite que você crie um saque para sua conta.
+       *
+       * @param data Dados do saque
+       * @returns Dados do saque criado ou erro
+       * @see https://docs.abacatepay.com/pages/withdraw/create
+       * @example
+       * ```ts
+       * const withdrawData = {
+       *  amount: 1000,
+       *  pixKeyType: "CPF",
+       *  pixKey: "12345678900",
+       * };
+       *
+       * const abacatePay = Abacate('apiKey');
+       *
+       * const response = await abacatePay.withdraw.create(withdrawData);
+       * /* ... * /
+       * ```
+       */
+      create(data: CreateWithdrawData): Promise<CreateWithdrawResponse> {
+        return request("/withdraw/create", {
+          method: "POST",
+          body: JSON.stringify(data),
+        });
+      },
+      /**
+       * Permite que você recupere uma lista de todos os saques criados.
+       *
+       * @returns Lista de saques ou erro
+       * @see https://docs.abacatepay.com/pages/withdraw/list
+       * @example
+       * ```ts
+       * const abacatePay = Abacate('apiKey');
+       *
+       * const response = await abacatePay.withdraw.list();
+       * /* ... * /
+       * ```
+       */
+      list(): Promise<ListWithdrawResponse> {
+        return request("/withdraw/list", {
+          method: "GET",
         });
       },
     },

@@ -29,6 +29,7 @@ describe("AbacatePay", () => {
     expect(sdk).toHaveProperty("customer");
     expect(sdk).toHaveProperty("coupon");
     expect(sdk).toHaveProperty("pixQrCode");
+    expect(sdk).toHaveProperty("withdraw");
   });
 
   describe("billing", () => {
@@ -218,6 +219,40 @@ describe("AbacatePay", () => {
         },
       );
       expect(result).toEqual({ data: "pix-qrcode-payment-simulated" });
+    });
+  });
+
+  describe("withdraw", () => {
+    it("should have create method that calls request with correct parameters", async () => {
+      const sdk = AbacatePay(apiKey);
+      const withdrawData = {
+        storeId: "store-123",
+        amount: 5000,
+        pixKeyType: "CPF" as const,
+        pixKey: "123.456.789-01",
+      };
+
+      mockRequest.mockResolvedValue({ data: "withdraw-created" });
+
+      const result = await sdk.withdraw.create(withdrawData);
+
+      expect(mockRequest).toHaveBeenCalledWith("/withdraw/create", {
+        method: "POST",
+        body: JSON.stringify(withdrawData),
+      });
+      expect(result).toEqual({ data: "withdraw-created" });
+    });
+
+    it("should have list method that calls request with correct parameters", async () => {
+      const sdk = AbacatePay(apiKey);
+      mockRequest.mockResolvedValue({ data: ["withdraw1", "withdraw2"] });
+
+      const result = await sdk.withdraw.list();
+
+      expect(mockRequest).toHaveBeenCalledWith("/withdraw/list", {
+        method: "GET",
+      });
+      expect(result).toEqual({ data: ["withdraw1", "withdraw2"] });
     });
   });
 });

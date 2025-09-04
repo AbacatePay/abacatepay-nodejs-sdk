@@ -460,9 +460,67 @@ export type CreatePixQrCodeResponse =
       data: IPixQrCode;
     };
 
+export type PixKeyType = "RANDOM" | "PHONE" | "EMAIL" | "CPF" | "CNPJ";
+
+export type CreateWithdrawData = {
+  /**
+   * ID da loja
+   */
+  storeId: string;
+  /**
+   * Valor do saque em centavos
+   */
+  amount: number;
+  /**
+   * Tipo da chave PIX
+   */
+  pixKeyType: PixKeyType;
+  /**
+   * Valor da chave PIX
+   */
+  pixKey: string;
+};
+
+export type WithdrawStatus = {
+  /**
+   * Status atual do saque
+   */
+  status: "PENDING" | "DONE" | "FAILED";
+  /**
+   * Mensagem de erro, se houver
+   */
+  error: string | null;
+};
+
+export type CreateWithdrawResponse =
+  | {
+      error: string;
+      data: null;
+    }
+  | {
+      error: null;
+      data: WithdrawStatus;
+    };
+
+export type ListWithdrawResponse =
+  | {
+      error: string;
+      data: null;
+    }
+  | {
+      error: null;
+      data: WithdrawStatus[];
+    };
+
+export interface IAbacatePayWithdrawal {
+  create(data: CreateWithdrawData): Promise<CreateWithdrawResponse>;
+  list(): Promise<ListWithdrawResponse>;
+}
+
 export interface IAbacatePay {
   billing: IAbacatePayBilling;
   customer: IAbacatePayCustomerBilling;
   coupon: IAbacatePayCoupon;
   pixQrCode: IPixQrCode;
+  withdrawal: IAbacatePayWithdrawal;
 }
