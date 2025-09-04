@@ -9,24 +9,27 @@
   <img alt="Test Coverage" src="https://img.shields.io/badge/coverage-80%25-yellow">
 </p>
 
-
 ## AbacatePay Node.js SDK
+
 Official AbacatePay SDK - Accept payments in seconds with a simple integration.
 
 ## Installation
+
 ```bash
 npm install abacatepay-nodejs-sdk
 ```
 
 ## Quick Usage
+
 ```js
-import AbacatePay from 'abacatepay-nodejs-sdk';
+import AbacatePay from "abacatepay-nodejs-sdk";
 
 // Initialize the SDK with your API key
-const abacate = AbacatePay('your_api_key');
+const abacate = AbacatePay("your_api_key");
 ```
 
 ### Creating a Payment
+
 ```js
 // Create a one-time payment
 const billing = await abacate.billing.create({
@@ -37,18 +40,22 @@ const billing = await abacate.billing.create({
       externalId: "PRO-PLAN",
       name: "Pro plan",
       quantity: 1,
-      price: 1000 // Amount in cents
-    }
+      price: 1000, // Amount in cents
+    },
   ],
   returnUrl: "https://yoursite.com/app",
   completionUrl: "https://yoursite.com/payment/success",
   customer: {
-    email: 'customer@example.com'
-  }
+    name: "Customer Name",
+    email: "customer@example.com",
+    cellphone: "+5511999999999",
+    taxId: "09240529020",
+  },
 });
 ```
 
 ### Response
+
 ```js
 {
   id: 'bill_12345667',
@@ -71,8 +78,11 @@ const billing = await abacate.billing.create({
 ```
 
 ## Payment Methods
+
 Currently supported payment methods:
+
 - PIX (Brazilian instant payment system)
 
 ## License
+
 This project is licensed under the terms of the MIT License.
