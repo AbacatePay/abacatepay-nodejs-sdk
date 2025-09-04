@@ -226,10 +226,14 @@ describe("AbacatePay", () => {
     it("should have create method that calls request with correct parameters", async () => {
       const sdk = AbacatePay(apiKey);
       const withdrawData = {
-        storeId: "store-123",
         amount: 5000,
-        pixKeyType: "CPF" as const,
-        pixKey: "123.456.789-01",
+        method: "PIX" as const,
+        pix: {
+          key: "123.456.789-01",
+          type: "CPF" as const,
+        },
+        description: "Saque para conta bancária",
+        externalId: "withdraw-test-001",
       };
 
       mockRequest.mockResolvedValue({ data: "withdraw-created" });

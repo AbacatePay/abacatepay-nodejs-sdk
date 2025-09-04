@@ -246,8 +246,13 @@ export default function AbacatePay(apiKey: string) {
        * ```ts
        * const withdrawData = {
        *  amount: 1000,
-       *  pixKeyType: "CPF",
-       *  pixKey: "12345678900",
+       *  method: "PIX",
+       *  pix: {
+       *    key: "12345678900",
+       *    type: "CPF"
+       *  },
+       *  description: "Saque para conta bancária",
+       *  externalId: "withdraw-001"
        * };
        *
        * const abacatePay = Abacate('apiKey');

@@ -190,7 +190,6 @@ export type CreateBillingLinkData = Pick<
 export type CreateBillingResponse =
   | {
       error: string;
-      data: null;
     }
   | {
       error: null;
@@ -199,7 +198,6 @@ export type CreateBillingResponse =
 export type ListBillingResponse =
   | {
       error: string;
-      data: null;
     }
   | {
       error: null;
@@ -241,7 +239,6 @@ export type CreateCustomerData = ICustomerMetadata;
 export type CreateCustomerResponse =
   | {
       error: string;
-      data: null;
     }
   | {
       error: null;
@@ -249,12 +246,11 @@ export type CreateCustomerResponse =
     };
 export type ListCustomerResponse =
   | {
-      error: string;
-      data: null;
-    }
-  | {
       error: null;
       data: ICustomer[];
+    }
+  | {
+      error: string;
     };
 
 export interface IAbacatePayBilling {
@@ -451,6 +447,7 @@ export type PixIdParams = {
   id: string;
 };
 
+
 export type CreatePixQrCodeResponse =
   | {
       error: string;
@@ -460,56 +457,100 @@ export type CreatePixQrCodeResponse =
       data: IPixQrCode;
     };
 
+    
 export type PixKeyType = "RANDOM" | "PHONE" | "EMAIL" | "CPF" | "CNPJ";
 
+
 export type CreateWithdrawData = {
-  /**
-   * ID da loja
-   */
-  storeId: string;
   /**
    * Valor do saque em centavos
    */
   amount: number;
   /**
-   * Tipo da chave PIX
+   * Método de pagamento (atualmente apenas PIX é suportado)
    */
-  pixKeyType: PixKeyType;
+  method: "PIX";
   /**
-   * Valor da chave PIX
+   * Dados da chave PIX para o saque
    */
-  pixKey: string;
+  pix: {
+    /**
+     * Valor da chave PIX
+     */
+    key: string;
+    /**
+     * Tipo da chave PIX
+     */
+    type: PixKeyType;
+  };
+  /**
+   * Descrição do saque
+   */
+  description: string;
+  /**
+   * ID externo para referência do saque
+   */
+  externalId: string;
 };
 
-export type WithdrawStatus = {
+export type IWithdraw = {
+  /**
+   * Identificador único do saque
+   */
+  id: string;
+  /**
+   * Valor do saque em centavos
+   */
+  amount: number;
   /**
    * Status atual do saque
    */
   status: "PENDING" | "DONE" | "FAILED";
   /**
-   * Mensagem de erro, se houver
+   * Método de pagamento utilizado
    */
-  error: string | null;
+  method: "PIX";
+  /**
+   * Dados da chave PIX utilizada
+   */
+  pix: {
+    key: string;
+    type: PixKeyType;
+  };
+  /**
+   * Descrição do saque
+   */
+  description: string;
+  /**
+   * ID externo para referência
+   */
+  externalId: string;
+  /**
+   * Data e hora de criação do saque
+   */
+  createdAt: string;
+  /**
+   * Data e hora da última atualização
+   */
+  updatedAt: string;
 };
 
 export type CreateWithdrawResponse =
   | {
       error: string;
-      data: null;
     }
   | {
       error: null;
-      data: WithdrawStatus;
+      data: IWithdraw;
     };
 
 export type ListWithdrawResponse =
   | {
       error: string;
-      data: null;
     }
   | {
       error: null;
-      data: WithdrawStatus[];
+      data: IWithdraw[];
     };
 
 export interface IAbacatePayWithdrawal {
