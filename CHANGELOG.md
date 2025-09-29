@@ -1,5 +1,11 @@
 # abacatepay-nodejs-sdk
 
+## 1.6.0
+
+### Minor Changes
+
+- Introduce withdrawal management with create, get, and list methods
+
 ## 1.4.1
 
 ### Patch Changes

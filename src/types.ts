@@ -4,7 +4,7 @@ export type BillingStatus =
   | "CANCELLED"
   | "PAID"
   | "REFUNDED";
-export type BillingMethods = "PIX";
+export type BillingMethods = "PIX" | "CARD";
 export type BillingKind = "ONE_TIME" | "MULTIPLE_PAYMENTS";
 
 export type IBilling = {
@@ -460,9 +460,165 @@ export type CreatePixQrCodeResponse =
       data: IPixQrCode;
     };
 
+// Withdrawal types
+export type WithdrawalStatus =
+  | "PENDING"
+  | "PROCESSING"
+  | "COMPLETED"
+  | "FAILED"
+  | "CANCELLED";
+
+export type IWithdrawal = {
+  /**
+   * Identificador único do saque.
+   */
+  id: string;
+  /**
+   * Valor do saque em centavos.
+   */
+  amount: number;
+  /**
+   * Status do saque.
+   */
+  status: WithdrawalStatus;
+  /**
+   * Indica se o saque foi criado em ambiente de testes.
+   */
+  devMode: boolean;
+  /**
+   * Dados bancários para o saque.
+   */
+  bankAccount: {
+    bankCode: string;
+    agency: string;
+    account: string;
+    accountType: "CHECKING" | "SAVINGS";
+    holderName: string;
+    holderDocument: string;
+  };
+  /**
+   * Data e hora de criação do saque.
+   */
+  createdAt: string;
+  /**
+   * Data e hora da última atualização do saque.
+   */
+  updatedAt: string;
+  /**
+   * Data e hora de processamento do saque.
+   */
+  processedAt?: string;
+};
+
+export type CreateWithdrawalData = {
+  /**
+   * Valor do saque em centavos.
+   */
+  amount: number;
+  /**
+   * Dados bancários para o saque.
+   */
+  bankAccount: {
+    bankCode: string;
+    agency: string;
+    account: string;
+    accountType: "CHECKING" | "SAVINGS";
+    holderName: string;
+    holderDocument: string;
+  };
+};
+
+export type CreateWithdrawalResponse =
+  | {
+      error: string;
+      data: null;
+    }
+  | {
+      error: null;
+      data: IWithdrawal;
+    };
+
+export type GetWithdrawalResponse =
+  | {
+      error: string;
+      data: null;
+    }
+  | {
+      error: null;
+      data: IWithdrawal;
+    };
+
+export type ListWithdrawalResponse =
+  | {
+      error: string;
+      data: null;
+    }
+  | {
+      error: null;
+      data: IWithdrawal[];
+    };
+
+export interface IAbacatePayWithdrawal {
+  create(data: CreateWithdrawalData): Promise<CreateWithdrawalResponse>;
+  get(id: string): Promise<GetWithdrawalResponse>;
+  list(): Promise<ListWithdrawalResponse>;
+}
+
+// Store types
+export type IStore = {
+  /**
+   * Identificador único da loja.
+   */
+  id: string;
+  /**
+   * Nome da loja.
+   */
+  name: string;
+  /**
+   * Email da loja.
+   */
+  email: string;
+  /**
+   * Telefone da loja.
+   */
+  phone?: string;
+  /**
+   * Documento da loja (CPF/CNPJ).
+   */
+  document: string;
+  /**
+   * Indica se a loja está em ambiente de testes.
+   */
+  devMode: boolean;
+  /**
+   * Data e hora de criação da loja.
+   */
+  createdAt: string;
+  /**
+   * Data e hora da última atualização da loja.
+   */
+  updatedAt: string;
+};
+
+export type GetStoreResponse =
+  | {
+      error: string;
+      data: null;
+    }
+  | {
+      error: null;
+      data: IStore;
+    };
+
+export interface IAbacatePayStore {
+  get(): Promise<GetStoreResponse>;
+}
+
 export interface IAbacatePay {
   billing: IAbacatePayBilling;
   customer: IAbacatePayCustomerBilling;
   coupon: IAbacatePayCoupon;
   pixQrCode: IPixQrCode;
+  withdrawal: IAbacatePayWithdrawal;
+  store: IAbacatePayStore;
 }

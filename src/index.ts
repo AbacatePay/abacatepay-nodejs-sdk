@@ -10,8 +10,14 @@ import type {
   CreateCustomerResponse,
   CreatePixQrCodeData,
   CreatePixQrCodeResponse,
+  CreateWithdrawalData,
+  CreateWithdrawalResponse,
+  GetStoreResponse,
+  GetWithdrawalResponse,
   ListBillingResponse,
+  ListCouponResponse,
   ListCustomerResponse,
+  ListWithdrawalResponse,
   PixIdParams,
 } from "./types";
 
@@ -154,12 +160,44 @@ export default function AbacatePay(apiKey: string) {
        *
        * @param data Dados do cupom
        * @returns Dados do cupom criado ou erro
+       * @see https://docs.abacatepay.com/pages/cupom/create
+       * @example
+       * ```ts
+       * const couponData = {
+       *   code: 'DESCONTO10',
+       *   discountKind: 'PERCENTAGE',
+       *   discount: 10,
+       *   maxRedeems: 100,
+       *   notes: 'Desconto de 10% para novos clientes'
+       * };
+       *
+       * const abacatePay = Abacate('apiKey');
+       *
+       * const response = await abacatePay.coupon.create(couponData);
+       * /* ... * /
+       * ```
        */
       create(data: CreateCouponData): Promise<CreateCouponResponse> {
         return request("/coupon/create", {
           method: "POST",
           body: JSON.stringify(data),
         });
+      },
+      /**
+       * Permite que você recupere uma lista de todos os cupons criados.
+       *
+       * @returns Lista de cupons criados ou erro
+       * @see https://docs.abacatepay.com/pages/cupom/list
+       * @example
+       * ```ts
+       * const abacatePay = Abacate('apiKey');
+       *
+       * const response = await abacatePay.coupon.list();
+       * /* ... * /
+       * ```
+       */
+      list(): Promise<ListCouponResponse> {
+        return request("/coupon/list", { method: "GET" });
       },
     },
     pixQrCode: {
@@ -230,6 +268,99 @@ export default function AbacatePay(apiKey: string) {
           method: "POST",
           body: JSON.stringify({ metadata }),
         });
+      },
+    },
+    /**
+     * Gerencie seus saques.
+     */
+    withdrawal: {
+      /**
+       * Permite que você crie um novo saque.
+       *
+       * @param data Dados do saque
+       * @returns Dados do saque criado ou erro
+       * @see https://docs.abacatepay.com/pages/saque/create
+       * @example
+       * ```ts
+       * const withdrawalData = {
+       *   amount: 10000, // R$ 100,00 em centavos
+       *   bankAccount: {
+       *     bankCode: '001',
+       *     agency: '1234',
+       *     account: '12345678',
+       *     accountType: 'CHECKING',
+       *     holderName: 'João da Silva',
+       *     holderDocument: '12345678900'
+       *   }
+       * };
+       *
+       * const abacatePay = Abacate('apiKey');
+       *
+       * const response = await abacatePay.withdrawal.create(withdrawalData);
+       * /* ... * /
+       * ```
+       */
+      create(data: CreateWithdrawalData): Promise<CreateWithdrawalResponse> {
+        return request("/withdrawal/create", {
+          method: "POST",
+          body: JSON.stringify(data),
+        });
+      },
+      /**
+       * Permite que você busque um saque específico pelo ID.
+       *
+       * @param id ID do saque
+       * @returns Dados do saque ou erro
+       * @see https://docs.abacatepay.com/pages/saque/get
+       * @example
+       * ```ts
+       * const abacatePay = Abacate('apiKey');
+       *
+       * const response = await abacatePay.withdrawal.get('withdrawal_123456');
+       * /* ... * /
+       * ```
+       */
+      get(id: string): Promise<GetWithdrawalResponse> {
+        return request(`/withdrawal/get?id=${id}`, {
+          method: "GET",
+        });
+      },
+      /**
+       * Permite que você recupere uma lista de todos os saques criados.
+       *
+       * @returns Lista de saques criados ou erro
+       * @see https://docs.abacatepay.com/pages/saque/list
+       * @example
+       * ```ts
+       * const abacatePay = Abacate('apiKey');
+       *
+       * const response = await abacatePay.withdrawal.list();
+       * /* ... * /
+       * ```
+       */
+      list(): Promise<ListWithdrawalResponse> {
+        return request("/withdrawal/list", { method: "GET" });
+      },
+    },
+    /**
+     * Gerencie informações da sua loja.
+     */
+    store: {
+      /**
+       * Permite que você obtenha os detalhes da sua loja.
+       *
+       * @returns Dados da loja ou erro
+       * @see https://docs.abacatepay.com/pages/loja/get
+       * @example
+       * ```ts
+       * const abacatePay = Abacate('apiKey');
+       *
+       * const response = await abacatePay.store.get();
+       * /* ... * /
+       * ```
+       */
+      get(): Promise<GetStoreResponse> {
+        return request("/store/get", { method: "GET" });
       },
     },
   };

@@ -29,6 +29,8 @@ describe("AbacatePay", () => {
     expect(sdk).toHaveProperty("customer");
     expect(sdk).toHaveProperty("coupon");
     expect(sdk).toHaveProperty("pixQrCode");
+    expect(sdk).toHaveProperty("withdrawal");
+    expect(sdk).toHaveProperty("store");
   });
 
   describe("billing", () => {
@@ -159,6 +161,18 @@ describe("AbacatePay", () => {
       });
       expect(result).toEqual({ data: "coupon-created" });
     });
+
+    it("should have list method that calls request with correct parameters", async () => {
+      const sdk = AbacatePay(apiKey);
+      mockRequest.mockResolvedValue({ data: ["coupon1", "coupon2"] });
+
+      const result = await sdk.coupon.list();
+
+      expect(mockRequest).toHaveBeenCalledWith("/coupon/list", {
+        method: "GET",
+      });
+      expect(result).toEqual({ data: ["coupon1", "coupon2"] });
+    });
   });
 
   describe("pixQrCode", () => {
@@ -218,6 +232,76 @@ describe("AbacatePay", () => {
         },
       );
       expect(result).toEqual({ data: "pix-qrcode-payment-simulated" });
+    });
+  });
+
+  describe("withdrawal", () => {
+    it("should have create method that calls request with correct parameters", async () => {
+      const sdk = AbacatePay(apiKey);
+      const withdrawalData = {
+        amount: 10000,
+        bankAccount: {
+          bankCode: "001",
+          agency: "1234",
+          account: "12345678",
+          accountType: "CHECKING" as const,
+          holderName: "João da Silva",
+          holderDocument: "12345678900",
+        },
+      };
+
+      mockRequest.mockResolvedValue({ data: "withdrawal-created" });
+
+      const result = await sdk.withdrawal.create(withdrawalData);
+
+      expect(mockRequest).toHaveBeenCalledWith("/withdrawal/create", {
+        method: "POST",
+        body: JSON.stringify(withdrawalData),
+      });
+      expect(result).toEqual({ data: "withdrawal-created" });
+    });
+
+    it("should have get method that calls request with correct parameters", async () => {
+      const sdk = AbacatePay(apiKey);
+      const withdrawalId = "withdrawal_123456";
+
+      mockRequest.mockResolvedValue({ data: "withdrawal-details" });
+
+      const result = await sdk.withdrawal.get(withdrawalId);
+
+      expect(mockRequest).toHaveBeenCalledWith(
+        `/withdrawal/get?id=${withdrawalId}`,
+        {
+          method: "GET",
+        },
+      );
+      expect(result).toEqual({ data: "withdrawal-details" });
+    });
+
+    it("should have list method that calls request with correct parameters", async () => {
+      const sdk = AbacatePay(apiKey);
+      mockRequest.mockResolvedValue({ data: ["withdrawal1", "withdrawal2"] });
+
+      const result = await sdk.withdrawal.list();
+
+      expect(mockRequest).toHaveBeenCalledWith("/withdrawal/list", {
+        method: "GET",
+      });
+      expect(result).toEqual({ data: ["withdrawal1", "withdrawal2"] });
+    });
+  });
+
+  describe("store", () => {
+    it("should have get method that calls request with correct parameters", async () => {
+      const sdk = AbacatePay(apiKey);
+      mockRequest.mockResolvedValue({ data: "store-details" });
+
+      const result = await sdk.store.get();
+
+      expect(mockRequest).toHaveBeenCalledWith("/store/get", {
+        method: "GET",
+      });
+      expect(result).toEqual({ data: "store-details" });
     });
   });
 });
