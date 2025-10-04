@@ -11,7 +11,9 @@ describe("Constants", () => {
 
   describe("ABACATE_PAY_DOCS", () => {
     it("should have correct documentation URL", () => {
-      expect(ABACATE_PAY_DOCS).toBe("https://abacatepay.readme.io/reference");
+      expect(ABACATE_PAY_DOCS).toBe(
+        "https://docs.abacatepay.com/pages/introduction"
+      );
     });
   });
 
