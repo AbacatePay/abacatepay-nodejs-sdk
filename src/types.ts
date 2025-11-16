@@ -210,11 +210,11 @@ export type ICustomerMetadata = {
   /**
    * Nome completo do seu cliente
    */
-  name?: string;
+  name: string;
   /**
    * Celular do cliente
    */
-  cellphone?: string;
+  cellphone: string;
   /**
    * E-mail do cliente
    */
@@ -222,7 +222,7 @@ export type ICustomerMetadata = {
   /**
    * CPF ou CNPJ do cliente.
    */
-  taxId?: string;
+  taxId: string;
 };
 
 export type ICustomer = {
