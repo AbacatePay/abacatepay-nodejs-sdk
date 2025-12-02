@@ -233,6 +233,24 @@ describe("AbacatePay", () => {
       );
       expect(result).toEqual({ data: "pix-qrcode-payment-simulated" });
     });
+
+    it("should have simulatePayment method that uses empty object as default metadata", async () => {
+      const sdk = AbacatePay(apiKey);
+      const pixQrCodeData = { id: "pix_char_abc123" };
+
+      mockRequest.mockResolvedValue({ data: "pix-qrcode-payment-simulated" });
+
+      const result = await sdk.pixQrCode.simulatePayment(pixQrCodeData);
+
+      expect(mockRequest).toHaveBeenCalledWith(
+        "/pixQrCode/simulate-payment?id=pix_char_abc123",
+        {
+          method: "POST",
+          body: JSON.stringify({ metadata: {} }),
+        },
+      );
+      expect(result).toEqual({ data: "pix-qrcode-payment-simulated" });
+    });
   });
 
   describe("withdrawal", () => {
