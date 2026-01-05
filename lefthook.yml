@@ -1,20 +1,18 @@
 pre-commit:
   parallel: true
   commands:
-    lint:
-      run: npm run lint
-    format:
-      run: npm run format
+    lint-and-format:
+      run: bun biome:check
 
 pre-push:
   parallel: true
   commands:
     lint:
-      run: npm run lint
+      run: bun biome:check
     test:
-      run: npm test || echo "Nenhum teste definido"
+      run: bun test || echo "Nenhum teste definido"
 
 commit-msg:
   commands:
     commitlint:
-      run: npx commitlint --edit "$1"
+      run: bunx commitlint --edit "$1"

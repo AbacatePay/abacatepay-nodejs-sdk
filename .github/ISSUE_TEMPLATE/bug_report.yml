@@ -38,7 +38,7 @@ body:
     attributes:
       label: "Ambiente"
       description: "Informe o sistema operacional, navegador ou versão da lib/API envolvida"
-      placeholder: "Ex: Fedora 41, Node 20.11.1"
+      placeholder: "Ex: Fedora 41, Bun v1.3.5"
 
   - type: textarea
     id: logs

@@ -75,7 +75,7 @@ Not sure where to start? You can look for issues tagged with `good first issue` 
 
 4.  **Set Up Environment and Install Dependencies:**
     *   Follow the instructions in the specific SDK's `README.md` to set up the development environment and install dependencies. Generally:
-        *   Node.js: `npm install` (or `yarn install`)
+        *   Node.js: `bun install` (or `yarn install`)
         *   Go: `go mod tidy`
         *   Python: `pip install -r requirements.txt` (or use Poetry/PDM if specified in the project)
         *   PHP: `composer install`

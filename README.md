@@ -16,7 +16,7 @@ Official AbacatePay SDK - Accept payments in seconds with a simple integration.
 ## Installation
 
 ```bash
-npm install abacatepay-nodejs-sdk
+bun install abacatepay-nodejs-sdk
 ```
 
 ## Quick Usage
