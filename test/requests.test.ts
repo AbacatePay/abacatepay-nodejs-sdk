@@ -1,85 +1,96 @@
 // requests.test.ts
-import { createRequest } from "../src/requests";
-import { BASE_URL, DEFAULT_HEADERS } from "../src/constants";
 
-// Mocking fetch
-global.fetch = jest.fn();
+import { beforeEach, describe, expect, it, mock } from "bun:test";
+import { BASE_URL, DEFAULT_HEADERS } from "../src/constants";
+import { createRequest } from "../src/requests";
+
+// Mock global fetch
+// @ts-expect-error
+global.fetch = mock();
 
 describe("createRequest", () => {
-  const apiKey = "test-api-key";
-  const path = "/test-path";
-  const mockResponse = { data: "test-data" };
-  const mockJsonPromise = Promise.resolve(mockResponse);
-  const mockFetchPromise = Promise.resolve({
-    ok: true,
-    json: () => mockJsonPromise,
-  });
+	const apiKey = "test-api-key";
+	const path = "/test-path";
+	const mockResponse = { data: "test-data" };
 
-  beforeEach(() => {
-    // Reset mocks
-    jest.clearAllMocks();
-    (fetch as jest.Mock).mockReturnValue(mockFetchPromise);
-  });
+	beforeEach(() => {
+		mock.restore();
+	});
 
-  it("should call fetch with correct URL and headers", async () => {
-    const request = createRequest(apiKey);
-    const options = { method: "GET" };
+	it("should call fetch with correct URL and headers", async () => {
+		(fetch as unknown as ReturnType<typeof mock>).mockResolvedValue({
+			ok: true,
+			json: async () => mockResponse,
+		} as Response);
 
-    await request(path, options);
+		const request = createRequest(apiKey);
+		const options = { method: "GET" };
 
-    expect(fetch).toHaveBeenCalledWith(`${BASE_URL}${path}`, {
-      ...options,
-      headers: DEFAULT_HEADERS(apiKey),
-    });
-  });
+		await request(path, options);
 
-  it("should merge custom headers with default headers", async () => {
-    const request = createRequest(apiKey);
-    const customHeaders = { "Custom-Header": "custom-value" };
-    const options = {
-      method: "GET",
-      headers: customHeaders,
-    };
+		expect(fetch).toHaveBeenCalledWith(`${BASE_URL}${path}`, {
+			...options,
+			headers: DEFAULT_HEADERS(apiKey),
+		});
+	});
 
-    await request(path, options);
+	it("should merge custom headers with default headers", async () => {
+		(fetch as unknown as ReturnType<typeof mock>).mockResolvedValue({
+			ok: true,
+			json: async () => mockResponse,
+		} as Response);
 
-    expect(fetch).toHaveBeenCalledWith(`${BASE_URL}${path}`, {
-      ...options,
-      headers: { ...DEFAULT_HEADERS(apiKey), ...customHeaders },
-    });
-  });
+		const request = createRequest(apiKey);
+		const customHeaders = { "Custom-Header": "custom-value" };
+		const options = {
+			method: "GET",
+			headers: customHeaders,
+		};
 
-  it("should return JSON data when response is ok", async () => {
-    const request = createRequest(apiKey);
-    const result = await request(path, { method: "GET" });
+		await request(path, options);
 
-    expect(result).toEqual(mockResponse);
-  });
+		expect(fetch).toHaveBeenCalledWith(`${BASE_URL}${path}`, {
+			...options,
+			headers: { ...DEFAULT_HEADERS(apiKey), ...customHeaders },
+		});
+	});
 
-  it("should return error object when response is not ok", async () => {
-    const errorMessage = "Error message";
-    const errorResponse = { message: errorMessage };
-    const errorJsonPromise = Promise.resolve(errorResponse);
-    const errorFetchPromise = Promise.resolve({
-      ok: false,
-      json: () => errorJsonPromise,
-    });
+	it("should return JSON data when response is ok", async () => {
+		(fetch as unknown as ReturnType<typeof mock>).mockResolvedValue({
+			ok: true,
+			json: async () => mockResponse,
+		} as Response);
 
-    (fetch as jest.Mock).mockReturnValue(errorFetchPromise);
+		const request = createRequest(apiKey);
+		const result = await request(path, { method: "GET" });
 
-    const request = createRequest(apiKey);
-    const result = await request(path, { method: "GET" });
+		expect(result).toEqual(mockResponse);
+	});
 
-    expect(result).toEqual({ error: errorMessage });
-  });
+	it("should return error object when response is not ok", async () => {
+		const errorMessage = "Error message";
 
-  it("should handle fetch errors", async () => {
-    const errorMessage = "Network error";
-    (fetch as jest.Mock).mockRejectedValue(new Error(errorMessage));
+		(fetch as unknown as ReturnType<typeof mock>).mockResolvedValue({
+			ok: false,
+			json: async () => ({ message: errorMessage }),
+		} as Response);
 
-    const request = createRequest(apiKey);
-    const result = await request(path, { method: "GET" });
+		const request = createRequest(apiKey);
+		const result = await request(path, { method: "GET" });
 
-    expect(result).toEqual({ error: errorMessage });
-  });
+		expect(result).toEqual({ error: errorMessage });
+	});
+
+	it("should handle fetch errors", async () => {
+		const errorMessage = "Network error";
+
+		(fetch as unknown as ReturnType<typeof mock>).mockRejectedValue(
+			new Error(errorMessage),
+		);
+
+		const request = createRequest(apiKey);
+		const result = await request(path, { method: "GET" });
+
+		expect(result).toEqual({ error: errorMessage });
+	});
 });

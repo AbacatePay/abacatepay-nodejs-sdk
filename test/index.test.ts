@@ -1,307 +1,326 @@
 // index.test.ts
+import { beforeEach, describe, expect, it, mock } from "bun:test";
+
+const mockRequest = mock();
+
+mock.module("../src/requests", () => ({
+	createRequest: mock(() => mockRequest),
+}));
+
 import AbacatePay, { AbacatePayError } from "../src/index";
 import { createRequest } from "../src/requests";
 
-// Mocking the createRequest module
-jest.mock("../src/requests", () => ({
-  createRequest: jest.fn(),
-}));
-
 describe("AbacatePay", () => {
-  const apiKey = "test-api-key";
-  const mockRequest = jest.fn();
+	const apiKey = "test-api-key";
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-    (createRequest as jest.Mock).mockReturnValue(mockRequest);
-  });
+	beforeEach(() => {
+		mock.restore();
+		mockRequest.mockReset();
+	});
 
-  it("should throw AbacatePayError if apiKey is not provided", () => {
-    expect(() => AbacatePay("")).toThrow(AbacatePayError);
-    expect(() => AbacatePay("")).toThrow("API key is required!");
-  });
+	it("should throw AbacatePayError if apiKey is not provided", () => {
+		expect(() => AbacatePay("")).toThrow(AbacatePayError);
+		expect(() => AbacatePay("")).toThrow("API key is required!");
+	});
 
-  it("should initialize correctly with valid API key", () => {
-    const sdk = AbacatePay(apiKey);
+	it("should initialize correctly with valid API key", () => {
+		const sdk = AbacatePay(apiKey);
 
-    expect(createRequest).toHaveBeenCalledWith(apiKey);
-    expect(sdk).toHaveProperty("billing");
-    expect(sdk).toHaveProperty("customer");
-    expect(sdk).toHaveProperty("coupon");
-    expect(sdk).toHaveProperty("pixQrCode");
-    expect(sdk).toHaveProperty("withdrawal");
-    expect(sdk).toHaveProperty("store");
-  });
+		expect(createRequest).toHaveBeenCalledWith(apiKey);
+		expect(sdk).toHaveProperty("billing");
+		expect(sdk).toHaveProperty("customer");
+		expect(sdk).toHaveProperty("coupon");
+		expect(sdk).toHaveProperty("pixQrCode");
+		expect(sdk).toHaveProperty("withdrawal");
+		expect(sdk).toHaveProperty("store");
+	});
 
-  describe("billing", () => {
-    it("should have create method that calls request with correct parameters", async () => {
-      const sdk = AbacatePay(apiKey);
-      const billingData = {
-        frequency: "ONE_TIME" as const,
-        methods: ["PIX" as const],
-        products: [
-          {
-            externalId: "product-1",
-            name: "Test Product",
-            quantity: 1,
-            price: 1000,
-          },
-        ],
-        returnUrl: "https://return.url",
-        completionUrl: "https://completion.url",
-        customer: {
-          email: "test@example.com",
-        },
-      };
+	describe("billing", () => {
+		it("create", async () => {
+			mockRequest.mockResolvedValue({ data: "billing-created" });
 
-      mockRequest.mockResolvedValue({ data: "billing-created" });
+			const sdk = AbacatePay(apiKey);
+			const billingData = {
+				frequency: "ONE_TIME" as const,
+				methods: ["PIX" as const],
+				products: [
+					{
+						externalId: "product-1",
+						name: "Test Product",
+						quantity: 1,
+						price: 1000,
+					},
+				],
+				returnUrl: "https://return.url",
+				completionUrl: "https://completion.url",
+				customer: {
+					email: "test@example.com",
+				},
+			};
 
-      const result = await sdk.billing.create(billingData);
+			const result = await sdk.billing.create(billingData);
 
-      expect(mockRequest).toHaveBeenCalledWith("/billing/create", {
-        method: "POST",
-        body: JSON.stringify(billingData),
-      });
-      expect(result).toEqual({ data: "billing-created" });
-    });
+			expect(mockRequest).toHaveBeenCalledWith("/billing/create", {
+				method: "POST",
+				body: JSON.stringify(billingData),
+			});
+			// @ts-expect-error
+			expect(result).toEqual({ data: "billing-created" });
+		});
 
-    it("should have createLink method that calls request with correct parameters", async () => {
-      const sdk = AbacatePay(apiKey);
-      const billingLinkData = {
-        methods: ["PIX" as const],
-        products: [
-          {
-            externalId: "product-1",
-            name: "Test Product",
-            quantity: 1,
-            price: 1000,
-          },
-        ],
-        returnUrl: "https://return.url",
-        completionUrl: "https://completion.url",
-      };
+		it("createLink", async () => {
+			mockRequest.mockResolvedValue({ data: "billing-link-created" });
 
-      mockRequest.mockResolvedValue({ data: "billing-link-created" });
+			const sdk = AbacatePay(apiKey);
+			const billingLinkData = {
+				methods: ["PIX" as const],
+				products: [
+					{
+						externalId: "product-1",
+						name: "Test Product",
+						quantity: 1,
+						price: 1000,
+					},
+				],
+				returnUrl: "https://return.url",
+				completionUrl: "https://completion.url",
+			};
 
-      const result = await sdk.billing.createLink(billingLinkData);
+			const result = await sdk.billing.createLink(billingLinkData);
 
-      expect(mockRequest).toHaveBeenCalledWith("/billing/create", {
-        method: "POST",
-        body: JSON.stringify({
-          ...billingLinkData,
-          frequency: "MULTIPLE_PAYMENTS",
-        }),
-      });
-      expect(result).toEqual({ data: "billing-link-created" });
-    });
+			expect(mockRequest).toHaveBeenCalledWith("/billing/create", {
+				method: "POST",
+				body: JSON.stringify({
+					...billingLinkData,
+					frequency: "MULTIPLE_PAYMENTS",
+				}),
+			});
+			// @ts-expect-error
+			expect(result).toEqual({ data: "billing-link-created" });
+		});
 
-    it("should have list method that calls request with correct parameters", async () => {
-      const sdk = AbacatePay(apiKey);
-      mockRequest.mockResolvedValue({ data: ["billing1", "billing2"] });
+		it("list", async () => {
+			mockRequest.mockResolvedValue({ data: ["billing1", "billing2"] });
 
-      const result = await sdk.billing.list();
+			const sdk = AbacatePay(apiKey);
+			const result = await sdk.billing.list();
 
-      expect(mockRequest).toHaveBeenCalledWith("/billing/list", {
-        method: "GET",
-      });
-      expect(result).toEqual({ data: ["billing1", "billing2"] });
-    });
-  });
+			expect(mockRequest).toHaveBeenCalledWith("/billing/list", {
+				method: "GET",
+			});
+			// @ts-expect-error
+			expect(result).toEqual({ data: ["billing1", "billing2"] });
+		});
+	});
 
-  describe("customer", () => {
-    it("should have create method that calls request with correct parameters", async () => {
-      const sdk = AbacatePay(apiKey);
-      const customerData = {
-        name: "Test Customer",
-        email: "test@example.com",
-        cellphone: "1234567890",
-        taxId: "12345678900",
-      };
+	describe("customer", () => {
+		it("create", async () => {
+			mockRequest.mockResolvedValue({ data: "customer-created" });
 
-      mockRequest.mockResolvedValue({ data: "customer-created" });
+			const sdk = AbacatePay(apiKey);
+			const customerData = {
+				name: "Test Customer",
+				email: "test@example.com",
+				cellphone: "1234567890",
+				taxId: "12345678900",
+			};
 
-      const result = await sdk.customer.create(customerData);
+			const result = await sdk.customer.create(customerData);
 
-      expect(mockRequest).toHaveBeenCalledWith("/customer/create", {
-        method: "POST",
-        body: JSON.stringify(customerData),
-      });
-      expect(result).toEqual({ data: "customer-created" });
-    });
+			expect(mockRequest).toHaveBeenCalledWith("/customer/create", {
+				method: "POST",
+				body: JSON.stringify(customerData),
+			});
+			// @ts-expect-error
+			expect(result).toEqual({ data: "customer-created" });
+		});
 
-    it("should have list method that calls request with correct parameters", async () => {
-      const sdk = AbacatePay(apiKey);
-      mockRequest.mockResolvedValue({ data: ["customer1", "customer2"] });
+		it("list", async () => {
+			mockRequest.mockResolvedValue({ data: ["customer1", "customer2"] });
 
-      const result = await sdk.customer.list();
+			const sdk = AbacatePay(apiKey);
+			const result = await sdk.customer.list();
 
-      expect(mockRequest).toHaveBeenCalledWith("/customer/list", {
-        method: "GET",
-      });
-      expect(result).toEqual({ data: ["customer1", "customer2"] });
-    });
-  });
+			expect(mockRequest).toHaveBeenCalledWith("/customer/list", {
+				method: "GET",
+			});
+			// @ts-expect-error
+			expect(result).toEqual({ data: ["customer1", "customer2"] });
+		});
+	});
 
-  describe("coupon", () => {
-    it("should have create method that calls request with correct parameters", async () => {
-      const sdk = AbacatePay(apiKey);
-      const couponData = {
-        code: "TEST10",
-        discountKind: "PERCENTAGE" as const,
-        discount: 10,
-      };
+	describe("coupon", () => {
+		it("create", async () => {
+			mockRequest.mockResolvedValue({ data: "coupon-created" });
 
-      mockRequest.mockResolvedValue({ data: "coupon-created" });
+			const sdk = AbacatePay(apiKey);
+			const couponData = {
+				code: "TEST10",
+				discountKind: "PERCENTAGE" as const,
+				discount: 10,
+			};
 
-      const result = await sdk.coupon.create(couponData);
+			const result = await sdk.coupon.create(couponData);
 
-      expect(mockRequest).toHaveBeenCalledWith("/coupon/create", {
-        method: "POST",
-        body: JSON.stringify(couponData),
-      });
-      expect(result).toEqual({ data: "coupon-created" });
-    });
+			expect(mockRequest).toHaveBeenCalledWith("/coupon/create", {
+				method: "POST",
+				body: JSON.stringify(couponData),
+			});
+			// @ts-expect-error
+			expect(result).toEqual({ data: "coupon-created" });
+		});
 
-    it("should have list method that calls request with correct parameters", async () => {
-      const sdk = AbacatePay(apiKey);
-      mockRequest.mockResolvedValue({ data: ["coupon1", "coupon2"] });
+		it("list", async () => {
+			mockRequest.mockResolvedValue({ data: ["coupon1", "coupon2"] });
 
-      const result = await sdk.coupon.list();
+			const sdk = AbacatePay(apiKey);
+			const result = await sdk.coupon.list();
 
-      expect(mockRequest).toHaveBeenCalledWith("/coupon/list", {
-        method: "GET",
-      });
-      expect(result).toEqual({ data: ["coupon1", "coupon2"] });
-    });
-  });
+			expect(mockRequest).toHaveBeenCalledWith("/coupon/list", {
+				method: "GET",
+			});
+			// @ts-expect-error
+			expect(result).toEqual({ data: ["coupon1", "coupon2"] });
+		});
+	});
 
-  describe("pixQrCode", () => {
-    it("should have create method that calls request with correct parameters", async () => {
-      const sdk = AbacatePay(apiKey);
-      const pixQrCodeData = {
-        amount: 1000,
-        expiresIn: 3600,
-        description: "Test payment",
-      };
+	describe("pixQrCode", () => {
+		it("create", async () => {
+			mockRequest.mockResolvedValue({ data: "pix-qrcode-created" });
 
-      mockRequest.mockResolvedValue({ data: "pix-qrcode-created" });
+			const sdk = AbacatePay(apiKey);
+			const pixQrCodeData = {
+				amount: 1000,
+				expiresIn: 3600,
+				description: "Test payment",
+			};
 
-      const result = await sdk.pixQrCode.create(pixQrCodeData);
+			const result = await sdk.pixQrCode.create(pixQrCodeData);
 
-      expect(mockRequest).toHaveBeenCalledWith("/pixQrCode/create", {
-        method: "POST",
-        body: JSON.stringify(pixQrCodeData),
-      });
-      expect(result).toEqual({ data: "pix-qrcode-created" });
-    });
+			expect(mockRequest).toHaveBeenCalledWith("/pixQrCode/create", {
+				method: "POST",
+				body: JSON.stringify(pixQrCodeData),
+			});
+			// @ts-expect-error
+			expect(result).toEqual({ data: "pix-qrcode-created" });
+		});
 
-    it("should have check method that calls request with correct parameters", async () => {
-      const sdk = AbacatePay(apiKey);
-      const pixQrCodeData = { id: "pix_char_abc123" };
+		it("check", async () => {
+			mockRequest.mockResolvedValue({ data: "pix-qrcode-status" });
 
-      mockRequest.mockResolvedValue({ data: "pix-qrcode-status" });
+			const sdk = AbacatePay(apiKey);
+			const pixQrCodeData = { id: "pix_char_abc123" };
 
-      const result = await sdk.pixQrCode.check(pixQrCodeData);
+			const result = await sdk.pixQrCode.check(pixQrCodeData);
 
-      expect(mockRequest).toHaveBeenCalledWith(
-        "/pixQrCode/check?id=pix_char_abc123",
-        {
-          method: "GET",
-        },
-      );
-      expect(result).toEqual({ data: "pix-qrcode-status" });
-    });
+			expect(mockRequest).toHaveBeenCalledWith(
+				"/pixQrCode/check?id=pix_char_abc123",
+				{ method: "GET" },
+			);
+			// @ts-expect-error
+			expect(result).toEqual({ data: "pix-qrcode-status" });
+		});
 
-    it("should have simulatePayment method that calls request with correct parameters", async () => {
-      const sdk = AbacatePay(apiKey);
-      const pixQrCodeData = { id: "pix_char_abc123" };
-      const metadata = { source: "test" };
+		it("simulatePayment", async () => {
+			mockRequest.mockResolvedValue({
+				data: "pix-qrcode-payment-simulated",
+			});
 
-      mockRequest.mockResolvedValue({ data: "pix-qrcode-payment-simulated" });
+			const sdk = AbacatePay(apiKey);
+			const pixQrCodeData = { id: "pix_char_abc123" };
+			const metadata = { source: "test" };
 
-      const result = await sdk.pixQrCode.simulatePayment(
-        pixQrCodeData,
-        metadata,
-      );
+			const result = await sdk.pixQrCode.simulatePayment(
+				pixQrCodeData,
+				metadata,
+			);
 
-      expect(mockRequest).toHaveBeenCalledWith(
-        "/pixQrCode/simulate-payment?id=pix_char_abc123",
-        {
-          method: "POST",
-          body: JSON.stringify({ metadata }),
-        },
-      );
-      expect(result).toEqual({ data: "pix-qrcode-payment-simulated" });
-    });
-  });
+			expect(mockRequest).toHaveBeenCalledWith(
+				"/pixQrCode/simulate-payment?id=pix_char_abc123",
+				{
+					method: "POST",
+					body: JSON.stringify({ metadata }),
+				},
+			);
+			// @ts-expect-error
+			expect(result).toEqual({
+				data: "pix-qrcode-payment-simulated",
+			});
+		});
+	});
 
-  describe("withdrawal", () => {
-    it("should have create method that calls request with correct parameters", async () => {
-      const sdk = AbacatePay(apiKey);
-      const withdrawalData = {
-        amount: 10000,
-        bankAccount: {
-          bankCode: "001",
-          agency: "1234",
-          account: "12345678",
-          accountType: "CHECKING" as const,
-          holderName: "João da Silva",
-          holderDocument: "12345678900",
-        },
-      };
+	describe("withdrawal", () => {
+		it("create", async () => {
+			mockRequest.mockResolvedValue({ data: "withdrawal-created" });
 
-      mockRequest.mockResolvedValue({ data: "withdrawal-created" });
+			const sdk = AbacatePay(apiKey);
+			const withdrawalData = {
+				amount: 10000,
+				bankAccount: {
+					bankCode: "001",
+					agency: "1234",
+					account: "12345678",
+					accountType: "CHECKING" as const,
+					holderName: "João da Silva",
+					holderDocument: "12345678900",
+				},
+			};
 
-      const result = await sdk.withdrawal.create(withdrawalData);
+			const result = await sdk.withdrawal.create(withdrawalData);
 
-      expect(mockRequest).toHaveBeenCalledWith("/withdrawal/create", {
-        method: "POST",
-        body: JSON.stringify(withdrawalData),
-      });
-      expect(result).toEqual({ data: "withdrawal-created" });
-    });
+			expect(mockRequest).toHaveBeenCalledWith("/withdrawal/create", {
+				method: "POST",
+				body: JSON.stringify(withdrawalData),
+			});
+			// @ts-expect-error
+			expect(result).toEqual({ data: "withdrawal-created" });
+		});
 
-    it("should have get method that calls request with correct parameters", async () => {
-      const sdk = AbacatePay(apiKey);
-      const withdrawalId = "withdrawal_123456";
+		it("get", async () => {
+			mockRequest.mockResolvedValue({ data: "withdrawal-details" });
 
-      mockRequest.mockResolvedValue({ data: "withdrawal-details" });
+			const sdk = AbacatePay(apiKey);
+			const withdrawalId = "withdrawal_123456";
+			const result = await sdk.withdrawal.get(withdrawalId);
 
-      const result = await sdk.withdrawal.get(withdrawalId);
+			expect(mockRequest).toHaveBeenCalledWith(
+				`/withdrawal/get?id=${withdrawalId}`,
+				{ method: "GET" },
+			);
+			// @ts-expect-error
+			expect(result).toEqual({ data: "withdrawal-details" });
+		});
 
-      expect(mockRequest).toHaveBeenCalledWith(
-        `/withdrawal/get?id=${withdrawalId}`,
-        {
-          method: "GET",
-        },
-      );
-      expect(result).toEqual({ data: "withdrawal-details" });
-    });
+		it("list", async () => {
+			mockRequest.mockResolvedValue({
+				data: ["withdrawal1", "withdrawal2"],
+			});
 
-    it("should have list method that calls request with correct parameters", async () => {
-      const sdk = AbacatePay(apiKey);
-      mockRequest.mockResolvedValue({ data: ["withdrawal1", "withdrawal2"] });
+			const sdk = AbacatePay(apiKey);
+			const result = await sdk.withdrawal.list();
 
-      const result = await sdk.withdrawal.list();
+			expect(mockRequest).toHaveBeenCalledWith("/withdrawal/list", {
+				method: "GET",
+			});
+			// @ts-expect-error
+			expect(result).toEqual({
+				data: ["withdrawal1", "withdrawal2"],
+			});
+		});
+	});
 
-      expect(mockRequest).toHaveBeenCalledWith("/withdrawal/list", {
-        method: "GET",
-      });
-      expect(result).toEqual({ data: ["withdrawal1", "withdrawal2"] });
-    });
-  });
+	describe("store", () => {
+		it("get", async () => {
+			mockRequest.mockResolvedValue({ data: "store-details" });
 
-  describe("store", () => {
-    it("should have get method that calls request with correct parameters", async () => {
-      const sdk = AbacatePay(apiKey);
-      mockRequest.mockResolvedValue({ data: "store-details" });
+			const sdk = AbacatePay(apiKey);
+			const result = await sdk.store.get();
 
-      const result = await sdk.store.get();
-
-      expect(mockRequest).toHaveBeenCalledWith("/store/get", {
-        method: "GET",
-      });
-      expect(result).toEqual({ data: "store-details" });
-    });
-  });
+			expect(mockRequest).toHaveBeenCalledWith("/store/get", {
+				method: "GET",
+			});
+			// @ts-expect-error
+			expect(result).toEqual({ data: "store-details" });
+		});
+	});
 });
