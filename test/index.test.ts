@@ -7,6 +7,15 @@ mock.module("../src/requests", () => ({
 	createRequest: mock(() => mockRequest),
 }));
 
+import { Routes } from "@abacatepay/types";
+import {
+	CouponDiscountKind,
+	PaymentFrequency,
+	PaymentMethod,
+	type RESTPostCreateCouponBody,
+	type RESTPostCreateNewChargeBody,
+	type RESTPostCreateNewWithdrawBody,
+} from "@abacatepay/types/v1";
 import AbacatePay, { AbacatePayError } from "../src/index";
 import { createRequest } from "../src/requests";
 
@@ -27,12 +36,13 @@ describe("AbacatePay", () => {
 		const sdk = AbacatePay(apiKey);
 
 		expect(createRequest).toHaveBeenCalledWith(apiKey);
+
+		expect(sdk).toHaveProperty("store");
+		expect(sdk).toHaveProperty("coupon");
 		expect(sdk).toHaveProperty("billing");
 		expect(sdk).toHaveProperty("customer");
-		expect(sdk).toHaveProperty("coupon");
 		expect(sdk).toHaveProperty("pixQrCode");
 		expect(sdk).toHaveProperty("withdrawal");
-		expect(sdk).toHaveProperty("store");
 	});
 
 	describe("billing", () => {
@@ -41,8 +51,8 @@ describe("AbacatePay", () => {
 
 			const sdk = AbacatePay(apiKey);
 			const billingData = {
-				frequency: "ONE_TIME" as const,
-				methods: ["PIX" as const],
+				frequency: PaymentFrequency.OneTime,
+				methods: [PaymentMethod.Pix],
 				products: [
 					{
 						externalId: "product-1",
@@ -53,14 +63,12 @@ describe("AbacatePay", () => {
 				],
 				returnUrl: "https://return.url",
 				completionUrl: "https://completion.url",
-				customer: {
-					email: "test@example.com",
-				},
-			};
+				customerId: "customer_xyz",
+			} satisfies RESTPostCreateNewChargeBody;
 
 			const result = await sdk.billing.create(billingData);
 
-			expect(mockRequest).toHaveBeenCalledWith("/billing/create", {
+			expect(mockRequest).toHaveBeenCalledWith(Routes.billing.create, {
 				method: "POST",
 				body: JSON.stringify(billingData),
 			});
@@ -73,7 +81,7 @@ describe("AbacatePay", () => {
 
 			const sdk = AbacatePay(apiKey);
 			const billingLinkData = {
-				methods: ["PIX" as const],
+				methods: [PaymentMethod.Pix],
 				products: [
 					{
 						externalId: "product-1",
@@ -84,11 +92,11 @@ describe("AbacatePay", () => {
 				],
 				returnUrl: "https://return.url",
 				completionUrl: "https://completion.url",
-			};
+			} satisfies Parameters<typeof sdk.billing.createLink>[0];
 
 			const result = await sdk.billing.createLink(billingLinkData);
 
-			expect(mockRequest).toHaveBeenCalledWith("/billing/create", {
+			expect(mockRequest).toHaveBeenCalledWith(Routes.billing.create, {
 				method: "POST",
 				body: JSON.stringify({
 					...billingLinkData,
@@ -105,7 +113,7 @@ describe("AbacatePay", () => {
 			const sdk = AbacatePay(apiKey);
 			const result = await sdk.billing.list();
 
-			expect(mockRequest).toHaveBeenCalledWith("/billing/list", {
+			expect(mockRequest).toHaveBeenCalledWith(Routes.billing.list, {
 				method: "GET",
 			});
 			// @ts-expect-error
@@ -127,10 +135,11 @@ describe("AbacatePay", () => {
 
 			const result = await sdk.customer.create(customerData);
 
-			expect(mockRequest).toHaveBeenCalledWith("/customer/create", {
+			expect(mockRequest).toHaveBeenCalledWith(Routes.customer.create, {
 				method: "POST",
 				body: JSON.stringify(customerData),
 			});
+
 			// @ts-expect-error
 			expect(result).toEqual({ data: "customer-created" });
 		});
@@ -141,7 +150,7 @@ describe("AbacatePay", () => {
 			const sdk = AbacatePay(apiKey);
 			const result = await sdk.customer.list();
 
-			expect(mockRequest).toHaveBeenCalledWith("/customer/list", {
+			expect(mockRequest).toHaveBeenCalledWith(Routes.customer.list, {
 				method: "GET",
 			});
 			// @ts-expect-error
@@ -155,17 +164,20 @@ describe("AbacatePay", () => {
 
 			const sdk = AbacatePay(apiKey);
 			const couponData = {
-				code: "TEST10",
-				discountKind: "PERCENTAGE" as const,
-				discount: 10,
-			};
+				data: {
+					discount: 10,
+					code: "TEST10",
+					discountKind: CouponDiscountKind.Percentage,
+				},
+			} satisfies RESTPostCreateCouponBody;
 
 			const result = await sdk.coupon.create(couponData);
 
-			expect(mockRequest).toHaveBeenCalledWith("/coupon/create", {
+			expect(mockRequest).toHaveBeenCalledWith(Routes.coupon.create, {
 				method: "POST",
 				body: JSON.stringify(couponData),
 			});
+
 			// @ts-expect-error
 			expect(result).toEqual({ data: "coupon-created" });
 		});
@@ -176,7 +188,7 @@ describe("AbacatePay", () => {
 			const sdk = AbacatePay(apiKey);
 			const result = await sdk.coupon.list();
 
-			expect(mockRequest).toHaveBeenCalledWith("/coupon/list", {
+			expect(mockRequest).toHaveBeenCalledWith(Routes.coupon.list, {
 				method: "GET",
 			});
 			// @ts-expect-error
@@ -197,10 +209,11 @@ describe("AbacatePay", () => {
 
 			const result = await sdk.pixQrCode.create(pixQrCodeData);
 
-			expect(mockRequest).toHaveBeenCalledWith("/pixQrCode/create", {
+			expect(mockRequest).toHaveBeenCalledWith(Routes.pix.createQRCode, {
 				method: "POST",
 				body: JSON.stringify(pixQrCodeData),
 			});
+
 			// @ts-expect-error
 			expect(result).toEqual({ data: "pix-qrcode-created" });
 		});
@@ -208,44 +221,43 @@ describe("AbacatePay", () => {
 		it("check", async () => {
 			mockRequest.mockResolvedValue({ data: "pix-qrcode-status" });
 
+			const id = "pix_char_abc123";
 			const sdk = AbacatePay(apiKey);
-			const pixQrCodeData = { id: "pix_char_abc123" };
 
-			const result = await sdk.pixQrCode.check(pixQrCodeData);
+			const result = await sdk.pixQrCode.check(id);
 
-			expect(mockRequest).toHaveBeenCalledWith(
-				"/pixQrCode/check?id=pix_char_abc123",
-				{ method: "GET" },
-			);
+			expect(mockRequest).toHaveBeenCalledWith(Routes.pix.checkStatus({ id }), {
+				method: "GET",
+			});
+
 			// @ts-expect-error
 			expect(result).toEqual({ data: "pix-qrcode-status" });
 		});
 
 		it("simulatePayment", async () => {
 			mockRequest.mockResolvedValue({
-				data: "pix-qrcode-payment-simulated",
+				data: {
+					id: "pix-qrcode-payment-simulated",
+				},
 			});
 
 			const sdk = AbacatePay(apiKey);
-			const pixQrCodeData = { id: "pix_char_abc123" };
+
+			const id = "pix_char_abc123";
+
 			const metadata = { source: "test" };
 
-			const result = await sdk.pixQrCode.simulatePayment(
-				pixQrCodeData,
-				metadata,
-			);
+			const result = await sdk.pixQrCode.simulatePayment(id, metadata);
 
 			expect(mockRequest).toHaveBeenCalledWith(
-				"/pixQrCode/simulate-payment?id=pix_char_abc123",
+				Routes.pix.simulatePayment({ id }),
 				{
 					method: "POST",
 					body: JSON.stringify({ metadata }),
 				},
 			);
-			// @ts-expect-error
-			expect(result).toEqual({
-				data: "pix-qrcode-payment-simulated",
-			});
+
+			expect(result.data?.id).toEqual("pix-qrcode-payment-simulated");
 		});
 	});
 
@@ -255,23 +267,22 @@ describe("AbacatePay", () => {
 
 			const sdk = AbacatePay(apiKey);
 			const withdrawalData = {
+				externalId: "custom_id_abc",
+				method: "PIX",
 				amount: 10000,
-				bankAccount: {
-					bankCode: "001",
-					agency: "1234",
-					account: "12345678",
-					accountType: "CHECKING" as const,
-					holderName: "João da Silva",
-					holderDocument: "12345678900",
+				pix: {
+					type: "CPF",
+					key: "012.345.678-90",
 				},
-			};
+			} satisfies RESTPostCreateNewWithdrawBody;
 
 			const result = await sdk.withdrawal.create(withdrawalData);
 
-			expect(mockRequest).toHaveBeenCalledWith("/withdrawal/create", {
+			expect(mockRequest).toHaveBeenCalledWith(Routes.withdraw.create, {
 				method: "POST",
 				body: JSON.stringify(withdrawalData),
 			});
+
 			// @ts-expect-error
 			expect(result).toEqual({ data: "withdrawal-created" });
 		});
@@ -284,9 +295,10 @@ describe("AbacatePay", () => {
 			const result = await sdk.withdrawal.get(withdrawalId);
 
 			expect(mockRequest).toHaveBeenCalledWith(
-				`/withdrawal/get?id=${withdrawalId}`,
+				Routes.withdraw.get({ externalId: withdrawalId }),
 				{ method: "GET" },
 			);
+
 			// @ts-expect-error
 			expect(result).toEqual({ data: "withdrawal-details" });
 		});
@@ -297,11 +309,13 @@ describe("AbacatePay", () => {
 			});
 
 			const sdk = AbacatePay(apiKey);
+
 			const result = await sdk.withdrawal.list();
 
-			expect(mockRequest).toHaveBeenCalledWith("/withdrawal/list", {
+			expect(mockRequest).toHaveBeenCalledWith(Routes.withdraw.list, {
 				method: "GET",
 			});
+
 			// @ts-expect-error
 			expect(result).toEqual({
 				data: ["withdrawal1", "withdrawal2"],
@@ -316,7 +330,7 @@ describe("AbacatePay", () => {
 			const sdk = AbacatePay(apiKey);
 			const result = await sdk.store.get();
 
-			expect(mockRequest).toHaveBeenCalledWith("/store/get", {
+			expect(mockRequest).toHaveBeenCalledWith(Routes.store.get, {
 				method: "GET",
 			});
 			// @ts-expect-error

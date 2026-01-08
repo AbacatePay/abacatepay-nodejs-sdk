@@ -1,7 +1,7 @@
 // requests.test.ts
 
 import { beforeEach, describe, expect, it, mock } from "bun:test";
-import { BASE_URL, DEFAULT_HEADERS } from "../src/constants";
+import { BASE_URL, createDefaultHeaders } from "../src/constants";
 import { createRequest } from "../src/requests";
 
 // Mock global fetch
@@ -11,7 +11,7 @@ global.fetch = mock();
 describe("createRequest", () => {
 	const apiKey = "test-api-key";
 	const path = "/test-path";
-	const mockResponse = { data: "test-data" };
+	const mockResponse = { id: "pix_abc" };
 
 	beforeEach(() => {
 		mock.restore();
@@ -30,7 +30,7 @@ describe("createRequest", () => {
 
 		expect(fetch).toHaveBeenCalledWith(`${BASE_URL}${path}`, {
 			...options,
-			headers: DEFAULT_HEADERS(apiKey),
+			headers: createDefaultHeaders(apiKey),
 		});
 	});
 
@@ -51,7 +51,7 @@ describe("createRequest", () => {
 
 		expect(fetch).toHaveBeenCalledWith(`${BASE_URL}${path}`, {
 			...options,
-			headers: { ...DEFAULT_HEADERS(apiKey), ...customHeaders },
+			headers: { ...createDefaultHeaders(apiKey), ...customHeaders },
 		});
 	});
 
@@ -62,6 +62,7 @@ describe("createRequest", () => {
 		} as Response);
 
 		const request = createRequest(apiKey);
+
 		const result = await request(path, { method: "GET" });
 
 		expect(result).toEqual(mockResponse);
@@ -76,6 +77,7 @@ describe("createRequest", () => {
 		} as Response);
 
 		const request = createRequest(apiKey);
+
 		const result = await request(path, { method: "GET" });
 
 		expect(result).toEqual({ error: errorMessage });
@@ -89,6 +91,7 @@ describe("createRequest", () => {
 		);
 
 		const request = createRequest(apiKey);
+
 		const result = await request(path, { method: "GET" });
 
 		expect(result).toEqual({ error: errorMessage });

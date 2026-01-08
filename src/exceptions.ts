@@ -10,7 +10,10 @@ export class AbacatePayError extends Error {
 		super(
 			`Abacate Pay Error: ${message}\n\nPlease, refer to the documentation at: ${ABACATE_PAY_DOCS}`,
 		);
+
 		this.name = "AbacatePayError";
+
+		Object.setPrototypeOf(this, new.target.prototype);
 	}
 
 	toJSON() {

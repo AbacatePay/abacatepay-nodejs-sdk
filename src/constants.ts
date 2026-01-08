@@ -1,8 +1,11 @@
+import { API_BASE_URL, API_VERSION } from "@abacatepay/types";
 import { ABACATE_PAY_VERSION } from "./version";
 
-export const BASE_URL = "https://api.abacatepay.com/v1";
-export const ABACATE_PAY_DOCS = "https://abacatepay.readme.io/reference";
-export function DEFAULT_HEADERS(apiKey: string) {
+export const BASE_URL = `${API_BASE_URL}v${API_VERSION}` as const;
+
+export const ABACATE_PAY_DOCS = "https://docs.abacatepay.com";
+
+export function createDefaultHeaders(apiKey: string) {
 	return {
 		Authorization: `Bearer ${apiKey}`,
 		"Content-Type": "application/json",

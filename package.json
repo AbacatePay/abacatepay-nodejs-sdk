@@ -1,42 +1,13 @@
 {
 	"name": "abacatepay-nodejs-sdk",
 	"version": "1.6.0",
-	"description": "SDK para integração com a AbacatePay.",
-	"main": "dist/index.js",
-	"module": "dist/index.mjs",
-	"types": "dist/index.d.ts",
-	"type": "module",
-	"publishConfig": {
-		"access": "public"
-	},
+	"author": "Christopher Ribeiro <christo_campiglia@hotmail.com>",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/abacatepay/abacatepay-nodejs-sdk"
 	},
-	"keywords": [
-		"sdk",
-		"typescript",
-		"abacatepay",
-		"nodejs",
-		"api-client"
-	],
-	"author": "Christopher Ribeiro <christo_campiglia@hotmail.com>",
-	"license": "MIT",
-	"files": [
-		"dist",
-		"README.md"
-	],
-	"scripts": {
-		"prebuild": "bun scripts/gen-version.ts",
-		"build": "tsup src --out-dir dist --format cjs,esm --dts --silent --no-splitting --clean",
-		"biome:check": "bunx biome check --write .",
-		"changeset": "changeset",
-		"version-packages": "changeset version",
-		"prepublishOnly": "bun run build",
-		"release": "changeset publish",
-		"test:coverage": "bun test --coverage",
-		"coverage:open": "bunx open-cli coverage/lcov-report/index.html"
-	},
+	"main": "dist/index.js",
+	"module": "dist/index.mjs",
 	"devDependencies": {
 		"@biomejs/biome": "^2.3.11",
 		"@changesets/changelog-github": "^0.5.2",
@@ -48,5 +19,37 @@
 		"open-cli": "^8.0.0",
 		"tsup": "^8.5.1",
 		"typescript": "^5.9.3"
+	},
+	"description": "SDK para integração com a AbacatePay.",
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"keywords": [
+		"sdk",
+		"typescript",
+		"abacatepay",
+		"nodejs",
+		"api-client"
+	],
+	"license": "MIT",
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"prebuild": "bun scripts/gen-version.ts",
+		"build": "tsup src --out-dir dist --format cjs,esm --dts --silent --no-splitting --clean",
+		"biome:check": "bunx biome check --write .",
+		"changeset": "changeset",
+		"version-packages": "changeset version",
+		"prepublishOnly": "bun run build",
+		"release": "changeset publish",
+		"test:coverage": "bun test --coverage",
+		"coverage:open": "bunx open-cli coverage/lcov-report/index.html"
+	},
+	"type": "module",
+	"types": "dist/index.d.ts",
+	"dependencies": {
+		"@abacatepay/types": "^0.0.4"
 	}
 }

@@ -1,17 +1,9 @@
-import { BASE_URL, DEFAULT_HEADERS } from "./constants";
+import { BASE_URL, createDefaultHeaders } from "./constants";
 
-export function createRequest(
-	apiKey: string,
-): <TResponse>(
-	path: string,
-	options: Parameters<typeof fetch>[1],
-) => Promise<TResponse> {
-	const defaultHeaders = DEFAULT_HEADERS(apiKey);
+export function createRequest(apiKey: string) {
+	const defaultHeaders = createDefaultHeaders(apiKey);
 
-	return async <TResponse>(
-		path: string,
-		options: Parameters<typeof fetch>[1],
-	): Promise<TResponse> => {
+	return async <Response>(path: string, options: RequestInit) => {
 		try {
 			const response = await fetch(`${BASE_URL}${path}`, {
 				...options,
@@ -20,12 +12,13 @@ export function createRequest(
 
 			return response.json().then((data) => {
 				if (!response.ok) {
-					return { error: data.message } as TResponse;
+					return { error: data.message } as Response;
 				}
-				return data;
+
+				return data as Response;
 			});
 		} catch (error) {
-			return { error: (error as Error).message } as TResponse;
+			return { error: (error as Error).message } as Response;
 		}
 	};
 }

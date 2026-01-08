@@ -1,28 +1,30 @@
+import { Routes } from "@abacatepay/types";
+import type {
+	APIWithdraw,
+	RESTGetCheckQRCodePixStatusData,
+	RESTGetListBillingsData,
+	RESTGetListCouponsData,
+	RESTGetListCustomersData,
+	RESTGetListWithdrawsData,
+	RESTGetStoreDetailsData,
+	RESTPostCreateCouponBody,
+	RESTPostCreateCouponData,
+	RESTPostCreateCustomerBody,
+	RESTPostCreateCustomerData,
+	RESTPostCreateNewChargeBody,
+	RESTPostCreateNewChargeData,
+	RESTPostCreateNewWithdrawBody,
+	RESTPostCreateNewWithdrawData,
+	RESTPostCreateQRCodePixBody,
+	RESTPostCreateQRCodePixData,
+	RESTPostSimulatePaymentData,
+} from "@abacatepay/types/v1";
 import { AbacatePayError } from "./exceptions";
 import { createRequest } from "./requests";
-import type {
-	CreateBillingData,
-	CreateBillingLinkData,
-	CreateBillingResponse,
-	CreateCouponData,
-	CreateCouponResponse,
-	CreateCustomerData,
-	CreateCustomerResponse,
-	CreatePixQrCodeData,
-	CreatePixQrCodeResponse,
-	CreateWithdrawalData,
-	CreateWithdrawalResponse,
-	GetStoreResponse,
-	GetWithdrawalResponse,
-	ListBillingResponse,
-	ListCouponResponse,
-	ListCustomerResponse,
-	ListWithdrawalResponse,
-	PixIdParams,
-} from "./types";
 
 export default function AbacatePay(apiKey: string) {
 	if (!apiKey) throw new AbacatePayError("API key is required!");
+
 	const request = createRequest(apiKey);
 
 	return {
@@ -65,8 +67,8 @@ export default function AbacatePay(apiKey: string) {
 			 * const response = await abacatePay.billing.create(billingData);
 			 * /* ... * /
 			 */
-			create(data: CreateBillingData): Promise<CreateBillingResponse> {
-				return request("/billing/create", {
+			create(data: RESTPostCreateNewChargeBody) {
+				return request<RESTPostCreateNewChargeData>(Routes.billing.create, {
 					method: "POST",
 					body: JSON.stringify(data),
 				});
@@ -78,8 +80,18 @@ export default function AbacatePay(apiKey: string) {
 			 * @param data Dados da cobrança
 			 * @returns Dados da cobrança criada ou erro
 			 */
-			createLink(data: CreateBillingLinkData): Promise<CreateBillingResponse> {
-				return request("/billing/create", {
+			createLink(
+				data: Pick<
+					RESTPostCreateNewChargeBody,
+					| "customer"
+					| "customerId"
+					| "methods"
+					| "products"
+					| "completionUrl"
+					| "returnUrl"
+				>,
+			) {
+				return request<RESTPostCreateNewChargeData>(Routes.billing.create, {
 					method: "POST",
 					body: JSON.stringify({
 						...data,
@@ -100,8 +112,10 @@ export default function AbacatePay(apiKey: string) {
 			 * const response = await abacatePay.billing.list();
 			 * /* ... * /
 			 */
-			list(): Promise<ListBillingResponse> {
-				return request("/billing/list", { method: "GET" });
+			list() {
+				return request<RESTGetListBillingsData>(Routes.billing.list, {
+					method: "GET",
+				});
 			},
 		},
 		/**
@@ -129,8 +143,8 @@ export default function AbacatePay(apiKey: string) {
 			 * /* ... * /
 			 * ```
 			 */
-			create(data: CreateCustomerData): Promise<CreateCustomerResponse> {
-				return request("/customer/create", {
+			create(data: RESTPostCreateCustomerBody) {
+				return request<RESTPostCreateCustomerData>(Routes.customer.create, {
 					method: "POST",
 					body: JSON.stringify(data),
 				});
@@ -147,8 +161,10 @@ export default function AbacatePay(apiKey: string) {
 			 * const response = await abacatePay.customer.list();
 			 * /* ... * /
 			 */
-			list(): Promise<ListCustomerResponse> {
-				return request("/customer/list", { method: "GET" });
+			list() {
+				return request<RESTGetListCustomersData>(Routes.customer.list, {
+					method: "GET",
+				});
 			},
 		},
 		/**
@@ -177,8 +193,8 @@ export default function AbacatePay(apiKey: string) {
 			 * /* ... * /
 			 * ```
 			 */
-			create(data: CreateCouponData): Promise<CreateCouponResponse> {
-				return request("/coupon/create", {
+			create(data: RESTPostCreateCouponBody) {
+				return request<RESTPostCreateCouponData>(Routes.coupon.create, {
 					method: "POST",
 					body: JSON.stringify(data),
 				});
@@ -196,8 +212,10 @@ export default function AbacatePay(apiKey: string) {
 			 * /* ... * /
 			 * ```
 			 */
-			list(): Promise<ListCouponResponse> {
-				return request("/coupon/list", { method: "GET" });
+			list() {
+				return request<RESTGetListCouponsData>(Routes.coupon.list, {
+					method: "GET",
+				});
 			},
 		},
 		pixQrCode: {
@@ -221,8 +239,8 @@ export default function AbacatePay(apiKey: string) {
 			 * /* ... * /
 			 * ```
 			 */
-			create(data: CreatePixQrCodeData): Promise<CreatePixQrCodeResponse> {
-				return request("/pixQrCode/create", {
+			create(data: RESTPostCreateQRCodePixBody) {
+				return request<RESTPostCreateQRCodePixData>(Routes.pix.createQRCode, {
 					method: "POST",
 					body: JSON.stringify(data),
 				});
@@ -241,10 +259,13 @@ export default function AbacatePay(apiKey: string) {
 			 * /* ... * /
 			 * ```
 			 */
-			check(data: PixIdParams): Promise<CreatePixQrCodeResponse> {
-				return request(`/pixQrCode/check?id=${data.id}`, {
-					method: "GET",
-				});
+			check(id: string) {
+				return request<RESTGetCheckQRCodePixStatusData>(
+					Routes.pix.checkStatus({ id }),
+					{
+						method: "GET",
+					},
+				);
 			},
 			/**
 			 * Checar status do pagamento do QRCode Pix.
@@ -260,14 +281,14 @@ export default function AbacatePay(apiKey: string) {
 			 * /* ... * /
 			 * ```
 			 */
-			simulatePayment(
-				data: PixIdParams,
-				metadata: Record<string, unknown> = {},
-			): Promise<CreatePixQrCodeResponse> {
-				return request(`/pixQrCode/simulate-payment?id=${data.id}`, {
-					method: "POST",
-					body: JSON.stringify({ metadata }),
-				});
+			simulatePayment(id: string, metadata: Record<string, unknown> = {}) {
+				return request<RESTPostSimulatePaymentData>(
+					Routes.pix.simulatePayment({ id }),
+					{
+						method: "POST",
+						body: JSON.stringify({ metadata }),
+					},
+				);
 			},
 		},
 		/**
@@ -300,8 +321,8 @@ export default function AbacatePay(apiKey: string) {
 			 * /* ... * /
 			 * ```
 			 */
-			create(data: CreateWithdrawalData): Promise<CreateWithdrawalResponse> {
-				return request("/withdrawal/create", {
+			create(data: RESTPostCreateNewWithdrawBody) {
+				return request<RESTPostCreateNewWithdrawData>(Routes.withdraw.create, {
 					method: "POST",
 					body: JSON.stringify(data),
 				});
@@ -320,8 +341,8 @@ export default function AbacatePay(apiKey: string) {
 			 * /* ... * /
 			 * ```
 			 */
-			get(id: string): Promise<GetWithdrawalResponse> {
-				return request(`/withdrawal/get?id=${id}`, {
+			get(externalId: string) {
+				return request<APIWithdraw>(Routes.withdraw.get({ externalId }), {
 					method: "GET",
 				});
 			},
@@ -338,8 +359,10 @@ export default function AbacatePay(apiKey: string) {
 			 * /* ... * /
 			 * ```
 			 */
-			list(): Promise<ListWithdrawalResponse> {
-				return request("/withdrawal/list", { method: "GET" });
+			list() {
+				return request<RESTGetListWithdrawsData>(Routes.withdraw.list, {
+					method: "GET",
+				});
 			},
 		},
 		/**
@@ -359,8 +382,10 @@ export default function AbacatePay(apiKey: string) {
 			 * /* ... * /
 			 * ```
 			 */
-			get(): Promise<GetStoreResponse> {
-				return request("/store/get", { method: "GET" });
+			get() {
+				return request<RESTGetStoreDetailsData>(Routes.store.get, {
+					method: "GET",
+				});
 			},
 		},
 	};
