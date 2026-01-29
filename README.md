@@ -13,6 +13,10 @@
 
 Official AbacatePay SDK - Accept payments in seconds with a simple integration.
 
+> This SDK now lives inside the official AbacatePay monorepo:
+
+> https://github.com/AbacatePay/ecosystem/tree/main/packages/sdk
+
 ## Installation
 
 ```bash
