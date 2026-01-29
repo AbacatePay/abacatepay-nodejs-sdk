@@ -4,7 +4,7 @@
 </p>
 &nbsp;
 <p align="center" style=style="margin-top">
-  <img alt="npm version" src="https://img.shields.io/npm/v/abacatepay-nodejs-sdk/1.3.1">
+  <img alt="npm version" src="https://img.shields.io/npm/v/abacatepay-nodejs-sdk">
   <img alt="Build Status" src="https://img.shields.io/badge/build-passing-brightgreen">
   <img alt="Test Coverage" src="https://img.shields.io/badge/coverage-80%25-yellow">
 </p>
