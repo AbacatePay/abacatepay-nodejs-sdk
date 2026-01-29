@@ -454,6 +454,7 @@ export type PixIdParams = {
 export type CreatePixQrCodeResponse =
   | {
       error: string;
+      data: null;
     }
   | {
       error: null;
