@@ -9,6 +9,42 @@
   <img alt="Test Coverage" src="https://img.shields.io/badge/coverage-80%25-yellow">
 </p>
 
+# ⚠️ This SDK Has Been Deprecated
+
+The package abacatepay-nodejs-sdk is officially deprecated and is no longer maintained.
+
+It will not receive updates, bug fixes, security patches, or new features.
+
+## 🚀 Use the New Official SDK
+
+Please migrate to the actively maintained package:
+
+```bash
+npm install @abacatepay/sdk
+```
+
+The new [@abacatepay/sdk](https://github.com/AbacatePay/ecosystem/tree/main/packages/sdk) is:
+
+- Fully supported and maintained
+- TypeScript-first
+- API-aligned with the latest AbacatePay platform updates
+- Designed for better performance and developer experience
+- Supports v1 and v2
+
+## 🔄 Migration Recommended
+
+We strongly recommend migrating as soon as possible to avoid future compatibility issues.
+
+Basic example:
+
+```ts
+import { AbacatePay } from '@abacatepay/sdk';
+
+const abacate = AbacatePay({ secret: 'YOUR_API_KEY' });
+```
+
+For full documentation and updated examples, refer to the official repository of [@abacatepay/sdk](https://github.com/AbacatePay/ecosystem/tree/main/packages/sdk).
+
 ## AbacatePay Node.js SDK
 
 Official AbacatePay SDK - Accept payments in seconds with a simple integration.
