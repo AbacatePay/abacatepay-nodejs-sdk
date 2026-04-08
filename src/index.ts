@@ -21,7 +21,7 @@ import type {
   PixIdParams,
 } from "./types";
 
-export default function AbacatePay(apiKey: string) {
+function AbacatePay(apiKey: string) {
   if (!apiKey) throw new AbacatePayError("API key is required!");
   const request = createRequest(apiKey);
 
@@ -366,4 +366,5 @@ export default function AbacatePay(apiKey: string) {
   };
 }
 
-export { AbacatePayError };
+export { AbacatePay, AbacatePayError };
+export default AbacatePay;
