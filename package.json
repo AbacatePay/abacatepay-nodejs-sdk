@@ -2,8 +2,21 @@
   "name": "abacatepay-nodejs-sdk",
   "version": "1.6.0",
   "description": "SDK para integração com a AbacatePay.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": {
+        "import": "./dist/index.d.mts",
+        "require": "./dist/index.d.ts"
+      },
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
   "publishConfig": {
     "access": "public"
   },
