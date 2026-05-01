@@ -30,7 +30,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   validate-body:
-    name: Ceck PR body is not empty
+    name: Check PR body is not empty
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read
@@ -38,5 +38,5 @@ jobs:
       - uses: JJ/github-pr-contains-action@releases/v14.1
         with:
          github-token: ${{ secrets.GITHUB_TOKEN }}
-         bodyDosNotContains: '^\\s*$'
+         bodyDoesNotContain: '^\\s*$'
          waivedUsers: 'dependabot[bot]|bot'
