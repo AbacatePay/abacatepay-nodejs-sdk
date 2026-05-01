@@ -20,7 +20,7 @@ export function createRequest(
 
       return response.json().then((data) => {
         if (!response.ok) {
-          return { error: data.message } as TResponse;
+          return { error: data.message || data.error } as TResponse;
         }
         return data;
       });
